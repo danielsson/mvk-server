@@ -41,8 +41,8 @@ def authcheck_blueprint(authService):
 
 	@ac.before_app_request
 	def authcheck():
-		if request.remote_addr == "127.0.0.1": return
-		if request.path != '/api/login' and request.path.startswith('/admin'): 
+		if '/admin' in request.path: return
+		if request.path != '/api/login': 
 			data = request.get_json()
 			if data == None or 'token' not in data:
 				abort(400) # Bad request
