@@ -90,7 +90,7 @@ app.register_blueprint(authcheckBlueprint)
 #
 manager = APIManager(app, flask_sqlalchemy_db=db)
 manager.create_api(Beacon, methods=['GET'])
-manager.create_api(User, methods=['GET'], exclude_columns=['password_hash'])
+manager.create_api(User, methods=['GET'], exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'])
 
 
 #
