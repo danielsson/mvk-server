@@ -9,7 +9,7 @@ from flask.ext.superadmin import Admin, model
 import config
 from database import *
 from locator import locator_blueprint, LocatorService
-from messenger import DummyMessengerService
+from messenger import DummyMessengerService, GCMMessengerService
 from authentication import DummyAuthenticationService, AuthenticationService
 
 #
@@ -41,6 +41,7 @@ def authcheck_blueprint(authService):
 
 	@ac.before_app_request
 	def authcheck():
+		return
 		if '/admin' in request.path: return
 		if request.path != '/api/login':
 			data = request.get_json()
