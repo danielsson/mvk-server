@@ -78,7 +78,8 @@ app.register_blueprint(authcheckBlueprint)
 #
 # Create the api
 #
-def preproccessor(token=None, **kw):
+def preproccessor(**kw):
+	token = request.args.get('token')
 	if token == None:
 	    raise ProcessingException(description='Not authenticated!', code=401)
 	if authService.getUserFromAccessToken(token) == None:
@@ -87,7 +88,7 @@ def preproccessor(token=None, **kw):
 
 
 manager = APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Beacon, methods=['GET'], preproccessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+manager.create_api(Beacon, methods=['GET'], preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 
 #
