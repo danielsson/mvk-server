@@ -83,10 +83,11 @@ def preproccessor(token=None, **kw):
 	    raise ProcessingException(description='Not authenticated!', code=401)
 	if authService.getUserFromAccessToken(token) == None:
 		raise ProcessingException(description='Not authenticated!', code=401)
+	return True
 
 
 manager = APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Beacon, methods=['GET'], preproccessors={'GET_SINGLE' : [preproccessor], 'GET_MANY' : [preproccessor]})
+manager.create_api(Beacon, methods=['GET'], preproccessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 
 #
