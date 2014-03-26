@@ -44,12 +44,15 @@ def authcheck_blueprint(authService):
 
 	ac = Blueprint("authcheck", __name__)
 
+	#
+	# A global check for all requests. Except for the root.
+	# 
 	@ac.before_app_request
 	def authcheck():
 		return
-		if '/admin' in request.path: return
+		if '/admin' in request.path: return # Allow acess to admin interface.
 		if request.path != '/api/login' and request.path != '/':
-			token = request.headers.get('Authorization')
+			token = request.headers.get('Authorization') # Get the auth token
 			if token == None:
 				print "[AUTH] " + request.remote_addr + " missing token"
 				abort(400) # Bad request
@@ -88,11 +91,29 @@ authcheckBlueprint = authcheck_blueprint(authService)
 app.register_blueprint(authcheckBlueprint)
 
 #
+# Preproccessor
+#
+def preproccessor(**kw):
+	token = request.headers.get('Authorization')
+	if token == None:
+		abort(400)
+	if authService.getUserFromAccessToken(token) == None:
+		abort(403)
+	return True
+
+#
 # Create the api
 #
 manager = APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Beacon, methods=['GET'])
-manager.create_api(User, methods=['GET'], exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'])
+manager.create_api(
+	Beacon,
+	methods=['GET'],
+	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+manager.create_api(
+	User,
+	methods=['GET'],
+	exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
+	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 
 #
@@ -116,6 +137,9 @@ admin.register(LocatingRequest, session=db.session)
 admin.register(Beacon, session=db.session)
 admin.init_app(app)
 
+#
+# Returns hello world. (Without authorization)
+# 
 @app.route("/")
 def index():
 	return "Hello World"
