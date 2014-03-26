@@ -103,7 +103,7 @@ def preproccessor(**kw):
 # Create the api
 #
 manager = APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Beacon, methods=['GET'])
+manager.create_api(Beacon, methods=['GET'], preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 manager.create_api(User, methods=['GET'], exclude_columns=['password_hash'], preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 
