@@ -43,10 +43,10 @@ def authcheck_blueprint(authService):
 	def authcheck():
 		if '/admin' in request.path: return
 		if request.path != '/api/login':
-			data = request.get_json()
-			if data == None or 'token' not in data:
+			token = request.args.get('token')
+			if token == None:
 				abort(400) # Bad request
-			if authService.getUserFromAccessToken(data['token']) == None:
+			if authService.getUserFromAccessToken(token) == None:
 				abort(401) # Access denied
 
 	@ac.route("/api/login", methods=['POST'])
