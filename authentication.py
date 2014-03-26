@@ -17,12 +17,10 @@ class DummyAuthenticationService:
 		return self.login(None, None)
 
 	def getDevice(self, user, gcm_token):
-		return Device(user=user,gcm_token=gcm_token)
+		return Device(user=user, gcm_token=gcm_token)
 
 	def createAccessToken(self, device):
-
-		token = hashlib.sha256(os.urandom(16))
-
+		token = hashlib.sha256(os.urandom(16)).hexdigest()
 		at = AccessToken(device=device, token=token)
 
 		return at
@@ -75,7 +73,7 @@ class AuthenticationService(object):
 
 	def createAccessToken(self, device):
 
-		token = hashlib.sha256(os.urandom(16))
+		token = hashlib.sha256(os.urandom(16) + "abc").hexdigest()
 
 		at = AccessToken(device=device, token=token)
 

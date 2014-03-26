@@ -58,11 +58,15 @@ def authcheck_blueprint(authService):
 			abort(403) # Access denied
 		if 'gcm_token' not in data:
 			abort(400) # Bad request, missing gcm token.
+		
 		user = User.query.filter_by(username=data['username']).first()
-		device = authService.getDevice(user,data['gcm_token'])
-		accessToken = createAccessToken(device)
+		if user is None:
+			abort(404)
 
-		return jsonify(token=accessToken)
+		device = authService.getDevice(user,data['gcm_token'])
+		accessToken = authService.createAccessToken(device)
+
+		return jsonify(token=accessToken.token)
 
 	return ac
 
