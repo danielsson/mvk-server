@@ -37,7 +37,7 @@ def authcheck_blueprint(authService):
 	def authcheck():
 		if '/admin' in request.path: return
 		if request.path != '/api/login' and request.path != '/':
-			token = request.headers.get('token')
+			token = request.headers.get('Authorization')
 			if token == None:
 				print "[AUTH] " + request.remote_addr + " missing token"
 				abort(400) # Bad request
