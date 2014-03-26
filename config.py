@@ -8,7 +8,7 @@ class ProductionConfig(rootconfig.ProductionConfig):
     pass
 
 class DevelopmentConfig(rootconfig.DevelopmentConfig):
-    pass
+	pass
 
 class TestingConfig(rootconfig.TestingConfig):
     pass

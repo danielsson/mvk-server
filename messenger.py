@@ -6,9 +6,8 @@ from database import Device
 
 class DummyMessengerService(object):
 	"""docstring for DummyMessenger"""
-	def __init__(self, arg):
+	def __init__(self):
 		super(DummyMessengerService, self).__init__()
-		self.arg = arg
 	
 	def requestTargetToIdentify(self, target):
 		print "Can somebody *please* tell", target.fullname,  "to stand up"
@@ -38,6 +37,10 @@ class GCMMessengerService(DummyMessengerService):
 		devices = target.devices.all()
 		registration_ids = [x.gcm_token for x in devices if len(x.gcm_token) > 0]
 
+		if len(registration_ids) == 0:
+			print "The user", target.username, "does not have any devices!"
+			return False
+
 		response = self.gcm.json_request(registration_ids=registration_ids, data=data)
 		handleGCMErrors(response)
 
@@ -47,6 +50,8 @@ class GCMMessengerService(DummyMessengerService):
 		print "Responding"
 
 		req_ids = [x.gcm_token for x in requestors if len(x.gcm_token) > 0]
+		if len(req_ids) == 0:
+			print "No requestors for notify"
 
 		data = {
 			'action':'FOUND',
@@ -62,7 +67,9 @@ class GCMMessengerService(DummyMessengerService):
 
 
 
-	def handleGCMErrors(request):
+	def handleGCMErrors(response):
+		print "GCM errored"
+		print response
 		if 'errors' in response:
 			for error, reg_ids in response['errors'].items():
 				if error is 'NotRegistered':

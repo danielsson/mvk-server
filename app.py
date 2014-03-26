@@ -6,7 +6,10 @@ from flask.ext.restless import APIManager
 from flask.blueprints import Blueprint
 from flask.ext.superadmin import Admin, model
 
-import config
+from gcm import GCM
+import os
+
+from config import *
 from database import *
 from locator import locator_blueprint, LocatorService
 from messenger import DummyMessengerService, GCMMessengerService
@@ -16,7 +19,13 @@ from authentication import DummyAuthenticationService, AuthenticationService
 # Create the app
 #
 app = Flask(__name__)
-app.config.from_object('config.DevelopmentConfig')
+
+cvar = os.environ.get('APP_CONFIG')
+if cvar is not None:
+	app.config.from_object(cvar)
+else:
+	app.config.from_object('config.DevelopmentConfig')
+
 
 #
 # Initialize database
@@ -83,9 +92,10 @@ authcheckBlueprint = authcheck_blueprint(authService)
 app.register_blueprint(authcheckBlueprint)
 
 #
-# Create the localization queue
+# Create the localisation queue
 #
-messageService = DummyMessengerService(1)
+gcm = GCM('AIzaSyAtwU_pr-oaoI0bVBrQbUEWWDTI0wyN9Jg')
+messageService = GCMMessengerService(db, gcm)
 locatorService = LocatorService(db, messageService)
 
 locatorBlueprint = locator_blueprint(db, locatorService)
@@ -108,5 +118,5 @@ def index():
 
 if __name__ == '__main__':
 	
-	app.run(port=app.config['PORT'])
+	app.run(host=app.config['HOST'], port=app.config['PORT'])
 

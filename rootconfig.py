@@ -9,9 +9,11 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
     PORT = 8080
     SECRET_KEY="kjbjbkkbj"
+    HOST = '127.0.0.1'
 
 class ProductionConfig(Config):
-    DATABASE_URI = 'mysql://user@localhost/foo'
+    SQLALCHEMY_DATABASE_URI = 'mysql://user@localhost/foo'
+    HOST = '0.0.0.0'
     PORT = 80
 
 class DevelopmentConfig(Config):
