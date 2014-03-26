@@ -42,7 +42,7 @@ class AuthenticationService(object):
 		user = User.query.filter_by(username=username).first()
 		
 		if user is not None:
-			pass_hash = hashlib.sha256(password)
+			pass_hash = hashlib.sha256(password).hexdigest()
 			if user.password_hash == pass_hash:
 				return user
 
@@ -78,6 +78,7 @@ class AuthenticationService(object):
 		at = AccessToken(device=device, token=token)
 
 		self.db.session.add(at)
+		self.db.session.commit()
 
 		return at
 

@@ -73,7 +73,7 @@ def authcheck_blueprint(authService):
 #
 # Register the authentication blueprint
 #
-authService = DummyAuthenticationService()
+authService = AuthenticationService(db)
 
 authcheckBlueprint = authcheck_blueprint(authService)
 app.register_blueprint(authcheckBlueprint)
