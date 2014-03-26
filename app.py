@@ -34,9 +34,8 @@ if cvar is not None:
 # Initialize database
 #
 db.init_app(app)
-if(app.config['DEBUG'] == True):
-	with app.app_context():
-		db.create_all()
+with app.app_context():
+	db.create_all()
 
 #
 # Blueprint for authchecking.
