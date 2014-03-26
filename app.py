@@ -81,7 +81,7 @@ app.register_blueprint(authcheckBlueprint)
 def preproccessor(token=None, **kw):
 	if token == None:
 	    raise ProcessingException(description='Not authenticated!', code=401)
-	if authService.getUserFromAccessToken(token) == None
+	if authService.getUserFromAccessToken(token) == None:
 		raise ProcessingException(description='Not authenticated!', code=401)
 
 
