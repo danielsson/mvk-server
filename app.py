@@ -42,12 +42,15 @@ def authcheck_blueprint(authService):
 
 	ac = Blueprint("authcheck", __name__)
 
+	#
+	# A global check for all requests. Except for the root.
+	# 
 	@ac.before_app_request
 	def authcheck():
 		return
-		if '/admin' in request.path: return
+		if '/admin' in request.path: return # Allow acess to admin interface.
 		if request.path != '/api/login' and request.path != '/':
-			token = request.headers.get('Authorization')
+			token = request.headers.get('Authorization') # Get the auth token
 			if token == None:
 				print "[AUTH] " + request.remote_addr + " missing token"
 				abort(400) # Bad request
@@ -114,6 +117,9 @@ admin.register(LocatingRequest, session=db.session)
 admin.register(Beacon, session=db.session)
 admin.init_app(app)
 
+#
+# Returns hello world. (Without authorization)
+# 
 @app.route("/")
 def index():
 	return "Hello World"
