@@ -37,7 +37,7 @@ def authcheck_blueprint(authService):
 	def authcheck():
 		if '/admin' in request.path: return
 		if request.path != '/api/login' and request.path != '/':
-			token = request.args.get('token')
+			token = request.headers.get('token')
 			if token == None:
 				print "[AUTH] " + request.remote_addr + " missing token"
 				abort(400) # Bad request
@@ -79,7 +79,7 @@ app.register_blueprint(authcheckBlueprint)
 # Create the api
 #
 def preproccessor(**kw):
-	token = request.args.get('token')
+	token = request.headers.get('Authorization')
 	if token == None:
 	    raise ProcessingException(description='Not authenticated!', code=401)
 	if authService.getUserFromAccessToken(token) == None:
