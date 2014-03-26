@@ -27,12 +27,6 @@ if(app.config['DEBUG'] == True):
 		db.create_all()
 
 #
-# Create the api
-#
-manager = APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Beacon, methods=['GET'])
-
-#
 # Blueprint for authchecking.
 #
 def authcheck_blueprint(authService):
@@ -80,6 +74,20 @@ authService = AuthenticationService(db)
 
 authcheckBlueprint = authcheck_blueprint(authService)
 app.register_blueprint(authcheckBlueprint)
+
+#
+# Create the api
+#
+def preproccessor(token=None, **kw):
+	if token == None:
+	    raise ProcessingException(description='Not authenticated!', code=401)
+	if authService.getUserFromAccessToken(token) == None
+		raise ProcessingException(description='Not authenticated!', code=401)
+
+
+manager = APIManager(app, flask_sqlalchemy_db=db)
+manager.create_api(Beacon, methods=['GET'], preproccessors={'GET_SINGLE' : [preproccessor], 'GET_MANY' : [preproccessor]})
+
 
 #
 # Create the localization queue
