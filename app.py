@@ -26,6 +26,9 @@ if cvar is not None:
 else:
 	app.config.from_object('config.DevelopmentConfig')
 
+cvar = os.environ.get('DATABASE_URL')
+if cvar is not None:
+	app.config['SQLALCHEMY_DATABASE_URI'] = cvar
 
 #
 # Initialize database

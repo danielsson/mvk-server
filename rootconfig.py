@@ -15,6 +15,8 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'mysql://user@localhost/foo'
     HOST = '0.0.0.0'
     PORT = 80
+    DEBUG = False
+    SECRET_KEY = "oajdspgjsejg63fgywtue7ri7wy"
 
 class DevelopmentConfig(Config):
     DEBUG = True
