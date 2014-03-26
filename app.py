@@ -42,30 +42,33 @@ def authcheck_blueprint(authService):
 	@ac.before_app_request
 	def authcheck():
 		if '/admin' in request.path: return
-		if request.path != '/api/login':
+		if request.path != '/api/login' and request.path != '/':
 			token = request.args.get('token')
 			if token == None:
+				print "[AUTH] " + request.remote_addr + " missing token"
 				abort(400) # Bad request
 			if authService.getUserFromAccessToken(token) == None:
+				print "[AUTH] " + request.remote_addr + " failed auth with token."
 				abort(401) # Access denied
 
 	@ac.route("/api/login", methods=['POST'])
 	def login():
 		data = request.get_json()
 		if data == None or 'username' not in data or 'password' not in data:
+			print "[LOGIN] " + request.remote_addr + " tried login without password or username"
 			abort(400) # Bad request
-		if authService.login(data['username'],data['password']) == None:
-			abort(403) # Access denied
 		if 'gcm_token' not in data:
+			print "[LOGIN] " + request.remote_addr + " missing gcm_token"
 			abort(400) # Bad request, missing gcm token.
-		
-		user = User.query.filter_by(username=data['username']).first()
-		if user is None:
-			abort(404)
+		user = authService.login(data['username'],data['password'])
+		if user == None:
+			print "[LOGIN] " + request.remote_addr + " tried login with not matching password/username"
+			abort(403) # Access denied
 
 		device = authService.getDevice(user,data['gcm_token'])
 		accessToken = authService.createAccessToken(device)
 
+		print "[LOGIN] " + request.remote_addr + " succesfully logged in"
 		return jsonify(token=accessToken.token)
 
 	return ac
@@ -101,15 +104,6 @@ admin.init_app(app)
 @app.route("/")
 def index():
 	return "Hello World"
-
-@app.route("/hello")
-def hello():
-	return "Hej världen"
-
-# Test return of json
-@app.route("/foobar")
-def foobar():
-	return jsonify(id=1,message='hello world')
 
 if __name__ == '__main__':
 	
