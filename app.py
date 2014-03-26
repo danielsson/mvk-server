@@ -95,10 +95,8 @@ def preproccessor(**kw):
 	token = request.headers.get('Authorization')
 	if token == None:
 		abort(400)
-	    #raise ProcessingException(description='Not authenticated!', code=401)
 	if authService.getUserFromAccessToken(token) == None:
 		abort(403)
-		#raise ProcessingException(description='Not authenticated!', code=401)
 	return True
 
 #
