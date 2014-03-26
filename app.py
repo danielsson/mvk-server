@@ -36,12 +36,6 @@ if(app.config['DEBUG'] == True):
 		db.create_all()
 
 #
-# Create the api
-#
-manager = APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Beacon, methods=['GET'])
-
-#
 # Blueprint for authchecking.
 #
 def authcheck_blueprint(authService):
@@ -53,7 +47,7 @@ def authcheck_blueprint(authService):
 		return
 		if '/admin' in request.path: return
 		if request.path != '/api/login' and request.path != '/':
-			token = request.args.get('token')
+			token = request.headers.get('Authorization')
 			if token == None:
 				print "[AUTH] " + request.remote_addr + " missing token"
 				abort(400) # Bad request
@@ -92,7 +86,15 @@ authcheckBlueprint = authcheck_blueprint(authService)
 app.register_blueprint(authcheckBlueprint)
 
 #
-# Create the localisation queue
+# Create the api
+#
+manager = APIManager(app, flask_sqlalchemy_db=db)
+manager.create_api(Beacon, methods=['GET'])
+manager.create_api(User, methods=['GET'], exclude_columns=['password_hash'])
+
+
+#
+# Create the localization queue
 #
 gcm = GCM('AIzaSyAtwU_pr-oaoI0bVBrQbUEWWDTI0wyN9Jg')
 messageService = GCMMessengerService(db, gcm)
