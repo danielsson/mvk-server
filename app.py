@@ -131,7 +131,7 @@ def setStatus():
 	stat = data['status']
 	if stat == None:
 		abort(400) # Bad request
-	token = request.headers.get('token')
+	token = request.headers.get('Authorization')
 	user = authService.getUserFromAccessToken(token)
 	if user == None:
 		return 'no user'
