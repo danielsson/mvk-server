@@ -131,6 +131,7 @@ def setStatus():
 	stat = data['status']
 	if stat == None:
 		abort(400) # Bad request
+	token = request.headers.get('token')
 	user = authService.getUserFromAccessToken(token)
 	user.values(status=stat)
 	self.db.session.commit()
