@@ -129,11 +129,11 @@ admin.register(Beacon, session=db.session)
 admin.init_app(app)
 
 #
-# Returns hello world. (Without authorization)
+# I'm a teapot.
 # 
 @app.route("/")
 def index():
-	return "Hello World"
+	abort(418)
 
 if __name__ == '__main__':
 	
