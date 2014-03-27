@@ -125,6 +125,7 @@ manager.create_api(
 	collection_name='status',
 	include_columns=['id', 'status'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+
 @app.route('/api/status', methods=['PATCH'])
 def setStatus():
 	data = request.get_json()
@@ -141,6 +142,7 @@ def setStatus():
 def out():
 	token = request.headers.get('Authorization')
 	authService.logout(token)
+	return jsonify(status='OK')
 
 #
 # Create the localization queue
