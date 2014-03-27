@@ -133,8 +133,9 @@ def setStatus():
 	if stat == None:
 		abort(400) # Bad request
 	token = request.headers.get('Authorization')
-	u = authService.getUserFromAccessToken(token)
-	# TODO: update user sqlalchemy expression
+	user = authService.getUserFromAccessToken(token)
+	user.status = stat
+	db.session.commit()
 	return jsonify(status='OK')
 
 # Logout
