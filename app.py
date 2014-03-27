@@ -105,16 +105,33 @@ def preproccessor(**kw):
 # Create the api
 #
 manager = APIManager(app, flask_sqlalchemy_db=db)
+
+# Beacon
 manager.create_api(
 	Beacon,
 	methods=['GET'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+# User
 manager.create_api(
 	User,
 	methods=['GET'],
 	exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
+# Logout
+@app.route('/api/logout', methods=['GET'])
+def out():
+	token = request.headers.get('Authorization')
+	authService.logout(token)
+
+# status
+@app.route('/api/status', methods=['GET', 'PUT']) # TODO: implement the methods of getting status.
+def getStatus():
+	if request.method == 'GET':
+		pass
+	elif request.method == 'PUT':
+		pass
+	pass
 
 #
 # Create the localization queue
