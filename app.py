@@ -118,20 +118,18 @@ manager.create_api(
 	exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
+manager.create_api(
+	User,
+	url_prefix='/api/user/',
+	collection_name='status',
+	include_columns=['status'],
+	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+
 # Logout
 @app.route('/api/logout', methods=['GET'])
 def out():
 	token = request.headers.get('Authorization')
 	authService.logout(token)
-
-# status
-@app.route('/api/status', methods=['GET', 'PUT']) # TODO: implement the methods of getting status.
-def getStatus():
-	if request.method == 'GET':
-		pass
-	elif request.method == 'PUT':
-		pass
-	pass
 
 #
 # Create the localization queue
