@@ -132,6 +132,7 @@ def setStatus(userid):
 		abort(400) # Bad request
 	user = authService.getUserFromAccessToken(token)
 	user.values(status=stat)
+	self.db.session.commit()
 
 # Logout
 @app.route('/api/logout', methods=['POST'])
