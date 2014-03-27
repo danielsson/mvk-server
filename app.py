@@ -159,6 +159,7 @@ app.register_blueprint(locatorBlueprint)
 # Create admin interface
 #
 admin = Admin()
+admin.register(Role, session=db.session)
 admin.register(User, session=db.session)
 admin.register(Device, session=db.session)
 admin.register(AccessToken, session=db.session)
