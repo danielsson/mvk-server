@@ -7,7 +7,16 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+roles = db.Table('roles', db.Model.metadata,
+	db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
+	db.Column('user_id', db.Integer, db.ForeignKey('user.id')))
 
+class Role(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(64))
+
+	def __str__(self):
+		return self.title
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -16,9 +25,9 @@ class User(db.Model):
 	password_hash = db.Column(db.String(64))
 
 	fullname = db.Column(db.String(64))
-	role = db.Column(db.String(64)) # TODO: Add so it is possible with multiple roles.
 	status = db.Column(db.String(32)) 
 
+	role = db.relationship('Role',secondary=roles, backref=db.backref('roles', lazy='dynamic'))
 
 	def __str__(self):
 		return self.fullname
