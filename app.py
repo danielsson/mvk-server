@@ -120,7 +120,8 @@ manager.create_api(
 
 manager.create_api(
 	User,
-	url_prefix='/api/',
+	url_prefix='/api/user/',
+	methods=['GET', 'PATCH']
 	collection_name='status',
 	include_columns=['status'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
