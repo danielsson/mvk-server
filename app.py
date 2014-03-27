@@ -125,7 +125,7 @@ manager.create_api(
 	collection_name='status',
 	include_columns=['id', 'status'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
-@api.route('/api/status', methods=['GET'])
+@app.route('/api/status', methods=['PATCH'])
 def setStatus(userid):
 	stat = request.get_json.get('status')
 	if stat == None:
@@ -134,7 +134,7 @@ def setStatus(userid):
 	user.values(status=stat)
 
 # Logout
-@app.route('/api/logout', methods=['OA'])
+@app.route('/api/logout', methods=['POST'])
 def out():
 	token = request.headers.get('Authorization')
 	authService.logout(token)
