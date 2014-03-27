@@ -127,7 +127,7 @@ manager.create_api(
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 @app.route('/api/status', methods=['PATCH'])
 def setStatus():
-	data = request.get_json
+	data = request.get_json()
 	stat = data['status']
 	if stat == None:
 		abort(400) # Bad request
