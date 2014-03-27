@@ -120,7 +120,6 @@ manager.create_api(
 
 manager.create_api(
 	User,
-	url_prefix='/api/user/',
 	methods=['GET', 'PATCH'],
 	collection_name='status',
 	include_columns=['status'],
