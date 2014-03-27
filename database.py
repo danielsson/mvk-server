@@ -16,7 +16,9 @@ class User(db.Model):
 	password_hash = db.Column(db.String(64))
 
 	fullname = db.Column(db.String(64))
-	role = db.Column(db.String(64))
+	role = db.Column(db.String(64)) # TODO: Add so it is possible with multiple roles.
+	status = db.Column(db.String(32)) 
+
 
 	def __str__(self):
 		return self.fullname
