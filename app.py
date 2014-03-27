@@ -26,14 +26,16 @@ if cvar is not None:
 else:
 	app.config.from_object('config.DevelopmentConfig')
 
+cvar = os.environ.get('DATABASE_URL')
+if cvar is not None:
+	app.config['SQLALCHEMY_DATABASE_URI'] = cvar
 
 #
 # Initialize database
 #
 db.init_app(app)
-if(app.config['DEBUG'] == True):
-	with app.app_context():
-		db.create_all()
+with app.app_context():
+	db.create_all()
 
 #
 # Blueprint for authchecking.
@@ -103,8 +105,15 @@ def preproccessor(**kw):
 # Create the api
 #
 manager = APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Beacon, methods=['GET'], preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
-manager.create_api(User, methods=['GET'], exclude_columns=['password_hash'], preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+manager.create_api(
+	Beacon,
+	methods=['GET'],
+	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+manager.create_api(
+	User,
+	methods=['GET'],
+	exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
+	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 
 #
