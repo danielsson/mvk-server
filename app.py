@@ -133,7 +133,7 @@ def setStatus():
 		abort(400) # Bad request
 	token = request.headers.get('token')
 	user = authService.getUserFromAccessToken(token)
-	user.values(status=stat)
+	user.status = stat 
 	self.db.session.commit()
 
 # Logout
