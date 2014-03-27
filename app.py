@@ -118,15 +118,23 @@ manager.create_api(
 	exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
+#Status
 manager.create_api(
 	User,
-	methods=['GET', 'PATCH'],
+	methods=['GET'],
 	collection_name='status',
-	include_columns=['status'],
+	include_columns=['id', 'status'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+@api.route('/api/status', methods=['GET'])
+def setStatus(userid):
+	stat = request.get_json.get('status')
+	if stat == None:
+		abort(400) # Bad request
+	user = authService.getUserFromAccessToken(token)
+	user.values(status=stat)
 
 # Logout
-@app.route('/api/logout', methods=['GET'])
+@app.route('/api/logout', methods=['OA'])
 def out():
 	token = request.headers.get('Authorization')
 	authService.logout(token)
