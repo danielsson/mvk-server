@@ -118,7 +118,7 @@ manager.create_api(
 	exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
-#Status
+#Get status
 manager.create_api(
 	User,
 	methods=['GET'],
@@ -126,7 +126,8 @@ manager.create_api(
 	include_columns=['id', 'status'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
-@app.route('/api/status', methods=['PATCH'])
+# Change status
+@app.route('/api/status', methods=['POST'])
 def setStatus():
 	data = request.get_json()
 	stat = data['status']
@@ -143,7 +144,26 @@ def setStatus():
 def out():
 	token = request.headers.get('Authorization')
 	authService.logout(token)
+	return jsonify(status='OK')	
+
+# set Roles
+@app.route('/api/role', methods=['POST'])
+def setRole():
+	token = request.headers.get('Authorization')
+	user = authService.getUserFromAccessToken(token)
+	data = request.get_json
+	role = data['role']
+	user.role = role
+	db.session.commit()
 	return jsonify(status='OK')
+
+# get Roles
+manager.create_api(
+	User,
+	methods=['GET'],
+	collection_name='status',
+	include_columns=['id', 'role'],
+	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 #
 # Create the localization queue
