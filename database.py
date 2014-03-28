@@ -27,7 +27,7 @@ class User(db.Model):
 	fullname = db.Column(db.String(64))
 	status = db.Column(db.String(32)) 
 
-	role = db.relationship('Role',secondary=roles, backref=db.backref('roles', lazy='dynamic'))
+	role = db.relationship('Role',secondary=roles, backref=db.backref('users', lazy='dynamic'))
 
 	def __str__(self):
 		return self.fullname
