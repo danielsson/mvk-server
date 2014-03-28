@@ -127,7 +127,7 @@ manager.create_api(
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 # Change status
-@app.route('/api/status', methods=['POST'])
+@app.route('/api/status/set', methods=['POST'])
 def setStatus():
 	data = request.get_json()
 	stat = data['status']
@@ -147,7 +147,7 @@ def out():
 	return jsonify(status='OK')	
 
 # set Roles
-@app.route('/api/role', methods=['POST'])
+@app.route('/api/role/set', methods=['POST'])
 def setRole():
 	token = request.headers.get('Authorization')
 	user = authService.getUserFromAccessToken(token)
