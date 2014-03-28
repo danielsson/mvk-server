@@ -153,8 +153,9 @@ def setRole():
 	user = authService.getUserFromAccessToken(token)
 	data = request.get_json
 	role = data['role']
-	user.role = role
-	db.session.commit()
+	#TODO: implement
+	#user.role = role
+	#db.session.commit()
 	return jsonify(status='OK')
 
 # get Roles
