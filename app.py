@@ -148,19 +148,39 @@ def out():
 def setRole():
 	token = request.headers.get('Authorization')
 	user = authService.getUserFromAccessToken(token)
-	data = request.get_json
-	role = data['role']
-	#TODO: implement
-	#user.role = role
-	#db.session.commit()
+	data = request.get_json()
+	if data == None:
+		abort(400) # Bad request
+	roles = data['role']
+	if roles == None:
+		abort(400) # Bad request
+
+	previousroles = user.roles.all()
+
+	# Remove all the roles that no longer exists
+	for prole in previousroles:
+		print prole.title
+		if prole.title not in roles:
+			print "removing " + prole.title + " from " + user.fullname
+			# LINE THAT REMOVES THE ROLE THAT NO LONGER EXISTS FROM THE USER...
+	# Add all the new roles to the user
+	for r in roles:
+		datarole = Role.query.filter_by(title=r).first()
+		if datarole == None:
+			newrole = Role(title=r, user=[user])
+			db.session.add(newrole)
+		else:
+			datarole.user.append(user)
+	
+	db.session.commit()
 	return jsonify(status='OK')
 
 # get Roles
 manager.create_api(
-	User,
+	Role,
 	methods=['GET'],
 	collection_name='role',
-	include_columns=['id', 'role'],
+	include_columns=['id','title','user','user.id'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 #
