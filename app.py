@@ -160,10 +160,10 @@ def setRole():
 
 # get Roles
 manager.create_api(
-	User,
+	Role,
 	methods=['GET'],
 	collection_name='role',
-	include_columns=['id', 'role'],
+	include_columns=['id', 'title', 'user'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 #
