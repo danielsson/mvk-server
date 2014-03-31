@@ -154,11 +154,13 @@ def setRole():
 	print "hej2"
 	user = authService.getUserFromAccessToken(token)
 	print "hej3"
-	#data = request.get_json()
+	data = request.get_json()
+	if data == None:
+		print "no data"
+	role = data['role']
+	if role == None:
+		print "no role in data"
 	print "hej4"
-	#print data
-	#role = data['role']
-	print "hej5"
 	#TODO: implement
 	#print role
 	
