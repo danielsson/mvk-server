@@ -149,24 +149,33 @@ def out():
 # set Roles
 @app.route('/api/role/set', methods=['POST'])
 def setRole():
-	print "hej1"
 	token = request.headers.get('Authorization')
-	print "hej2"
 	user = authService.getUserFromAccessToken(token)
-	print "hej3"
 	data = request.get_json()
 	if data == None:
-		print "no data"
-	role = data['role']
-	if role == None:
-		print "no role in data"
-	print "hej4"
-	#TODO: implement
-	#print role
+		abort(400) # Bad request
+	roles = data['role']
+	if roles == None:
+		abort(400) # Bad request
+
+	previousroles = user.roles.all()
+
+	# Remove all the roles that no longer exists
+	for prole in previousroles:
+		print prole.title
+		if prole.title not in roles:
+			print "removing " + prole.title + " from " + user.fullname
+			# LINE THAT REMOVES THE ROLE THAT NO LONGER EXISTS FROM THE USER...
+	# Add all the new roles to the user
+	for r in roles:
+		datarole = Role.query.filter_by(title=r).first()
+		if datarole == None:
+			newrole = Role(title=r, user=[user])
+			db.session.add(newrole)
+		else:
+			datarole.user.append(user)
 	
-	#user.role = role
-	#db.session.commit()
-	print "hejslut"
+	db.session.commit()
 	return jsonify(status='OK')
 
 # get Roles
