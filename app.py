@@ -149,17 +149,22 @@ def out():
 # set Roles
 @app.route('/api/role/set', methods=['POST'])
 def setRole():
+	print "hej1"
 	token = request.headers.get('Authorization')
+	print "hej2"
 	user = authService.getUserFromAccessToken(token)
-	data = request.get_json
-	role = data['role']
+	print "hej3"
+	#data = request.get_json()
+	print "hej4"
+	#print data
+	#role = data['role']
+	print "hej5"
 	#TODO: implement
-	print role
-	for r in role:
-		print r
-
+	#print role
+	
 	#user.role = role
 	#db.session.commit()
+	print "hejslut"
 	return jsonify(status='OK')
 
 # get Roles
