@@ -154,6 +154,10 @@ def setRole():
 	data = request.get_json
 	role = data['role']
 	#TODO: implement
+	print role
+	for r in role:
+		print r
+
 	#user.role = role
 	#db.session.commit()
 	return jsonify(status='OK')
