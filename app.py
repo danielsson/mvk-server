@@ -163,7 +163,7 @@ manager.create_api(
 	Role,
 	methods=['GET'],
 	collection_name='role',
-	include_columns=['id', 'title', 'user'],
+	include_columns=['id', 'title', 'user.id'],
 	preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
 #
