@@ -20,11 +20,8 @@ from authentication import DummyAuthenticationService, AuthenticationService
 #
 app = Flask(__name__)
 
-cvar = os.environ.get('APP_CONFIG')
-if cvar is not None:
-	app.config.from_object(cvar)
-else:
-	app.config.from_object('config.DevelopmentConfig')
+cvar = os.environ.get('APP_CONFIG', 'config.DevelopmentConfig')
+app.config.from_object(cvar)
 
 cvar = os.environ.get('DATABASE_URL')
 if cvar is not None:
