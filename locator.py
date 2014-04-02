@@ -37,6 +37,8 @@ class LocatorService(object):
 		self.db.session.add(req)
 		self.db.session.commit()
 
+		return True
+
 
 	def stopLocating(self, target):
 		pending = LocatingRequest.query.filter_by(target=target).all()
