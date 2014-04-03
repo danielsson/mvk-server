@@ -47,7 +47,6 @@ def authcheck_blueprint(authService):
     #
     @ac.before_app_request
     def authcheck():
-        return
         if '/admin' in request.path: return # Allow acess to admin interface.
         if request.path != '/api/login' and request.path != '/':
             token = request.headers.get('Authorization') # Get the auth token
