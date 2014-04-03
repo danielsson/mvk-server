@@ -150,20 +150,15 @@ def setRole():
     token = request.headers.get('Authorization')
     user = authService.getUserFromAccessToken(token)
     data = request.get_json()
-    if data == None:
+    if data == None or 'role' not in data:
         abort(400) # Bad request
     roles = data['role']
-    if roles == None:
-        abort(400) # Bad request
-
     previousroles = user.roles.all()
 
     # Remove all the roles that no longer exists
     for prole in previousroles:
-        print prole.title
         if prole.title not in roles:
-            print "removing " + prole.title + " from " + user.fullname
-            # LINE THAT REMOVES THE ROLE THAT NO LONGER EXISTS FROM THE USER...
+            db.session.delete(prole)
     # Add all the new roles to the user
     for r in roles:
         datarole = Role.query.filter_by(title=r).first()
