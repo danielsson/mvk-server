@@ -46,16 +46,14 @@ def authcheck_blueprint(authService):
     #
     @ac.before_app_request
     def authcheck():
-        return
-        # Allow acess to admin interface.
         if '/admin' in request.path:
-            return
+            return # Allow acess to admin interface.
         if request.path != '/api/login' and request.path != '/':
             # Get the auth token
             token = request.headers.get('Authorization')
             if token is None:
                 print "[AUTH] " + request.remote_addr + " missing token"
-                abort(400)  # Bad request
+                abort(401)  # Bad request
             if authService.getUserFromAccessToken(token) is None:
                 print "[AUTH] " + request.remote_addr + " failed auth with token."
                 abort(401)  # Access denied
