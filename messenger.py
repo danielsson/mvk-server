@@ -41,8 +41,9 @@ class GCMMessengerService(DummyMessengerService):
             print "The user", target.username, "does not have any devices!"
             return False
 
+        print registration_ids, data
         response = self.gcm.json_request(registration_ids=registration_ids, data=data)
-        handleGCMErrors(response)
+        self.handleGCMErrors(response)
 
         return True
 
@@ -59,7 +60,7 @@ class GCMMessengerService(DummyMessengerService):
         }
 
         response = self.gcm.json_request(registration_ids=reg_ids, data=data)
-        handleGCMErrors(response)
+        self.handleGCMErrors(response)
 
         return True
 
@@ -67,7 +68,7 @@ class GCMMessengerService(DummyMessengerService):
 
 
 
-    def handleGCMErrors(response):
+    def handleGCMErrors(self, response):
         print "GCM errored"
         print response
         if 'errors' in response:

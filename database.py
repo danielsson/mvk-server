@@ -28,7 +28,7 @@ class User(db.Model):
 
     fullname = db.Column(db.String(64))
     status = db.Column(db.String(32)) 
-    phonenumber = db.Column(db.String(32))
+    phone_number = db.Column(db.String(32))
 
     def __str__(self):
         return self.fullname
