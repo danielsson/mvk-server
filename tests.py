@@ -1,6 +1,6 @@
 
 # coding=UTF8
-from database import *
+from database import Device, LocatingRequest, Role, User
 from app import app
 import unittest
 
