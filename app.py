@@ -11,7 +11,7 @@ import os
 #import config
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 from locator import locator_blueprint, LocatorService
-from messenger import GCMMessengerService
+from messenger import GCMMessengerService, DummyMessengerService
 from authentication import AuthenticationService
 
 #
@@ -34,7 +34,8 @@ with app.app_context():
     db.create_all()
 
 
-#
+
+
 # Blueprint for authchecking.
 #
 def authcheck_blueprint(authService):
@@ -89,6 +90,10 @@ authService = AuthenticationService(db)
 
 authcheckBlueprint = authcheck_blueprint(authService)
 app.register_blueprint(authcheckBlueprint)
+
+def current_user():
+    token = request.headers.get('Authorization')
+    return authService.getUserFromAccessToken(token)
 
 #
 # Preproccessor
@@ -189,7 +194,7 @@ gcm = GCM('AIzaSyAtwU_pr-oaoI0bVBrQbUEWWDTI0wyN9Jg')
 messageService = GCMMessengerService(db, gcm)
 locatorService = LocatorService(db, messageService)
 
-locatorBlueprint = locator_blueprint(db, locatorService)
+locatorBlueprint = locator_blueprint(db, locatorService, current_user)
 app.register_blueprint(locatorBlueprint)
 
 #

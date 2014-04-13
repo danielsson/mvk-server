@@ -49,6 +49,7 @@ class LocatorService(object):
 
 	def notifyLocationFound(self, target, location):
 		"""Called when a target has notified its position"""
+		assert None not in (target, location)
 
 		requests = LocatingRequest.query.filter_by(target=target).all()
 
@@ -64,7 +65,7 @@ class LocatorService(object):
 
 
 
-def locator_blueprint(db, locService):
+def locator_blueprint(db, locService, current_user):
 
 	ls = Blueprint("Locator", __name__)
 
@@ -78,9 +79,7 @@ def locator_blueprint(db, locService):
 
 		target = User.query.get_or_404(data['target'])
 
-		#Temp
-		ME = 1
-		requester = User.query.get_or_404(ME)
+		requester = current_user()
 
 		locService.startLocating(target, requester)
 
@@ -93,9 +92,7 @@ def locator_blueprint(db, locService):
 		if data is None or 'location' not in data:
 			abort(400)
 
-		#Temp
-		ME = 1
-		target = User.query.get_or_404(ME)
+		target = current_user()
 
 		locService.notifyLocationFound(target, data['location'])
 
