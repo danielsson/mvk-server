@@ -50,9 +50,10 @@ class GCMMessengerService(DummyMessengerService):
     def respondLocationFound(self, requestors, target, location):
         print "Responding"
 
-        req_ids = [x.gcm_token for x in requestors if len(x.gcm_token) > 0]
-        if len(req_ids) == 0:
+        reg_ids = [x.gcm_token for x in requestors if len(x.gcm_token) > 0]
+        if len(reg_ids) == 0:
             print "No requestors for notify"
+            return False
 
         data = {
             'action':'FOUND',
@@ -69,9 +70,10 @@ class GCMMessengerService(DummyMessengerService):
 
 
     def handleGCMErrors(self, response):
-        print "GCM errored"
-        print response
         if 'errors' in response:
+            print "GCM errored"
+            print response
+
             for error, reg_ids in response['errors'].items():
                 if error is 'NotRegistered':
                     for rid in reg_ids:

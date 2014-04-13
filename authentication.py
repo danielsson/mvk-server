@@ -66,7 +66,7 @@ class AuthenticationService(object):
 
     def createAccessToken(self, device):
 
-        token = hashlib.sha256(os.urandom(16) + "salt_asdfghjkl").hexdigest()
+        token = hashlib.sha256(os.urandom(16) + "iluvthabiebz").hexdigest()
 
         at = AccessToken(device=device, token=token)
 
