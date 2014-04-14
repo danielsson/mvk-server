@@ -142,6 +142,7 @@ def setStatus():
     token = request.headers.get('Authorization')
     user = authService.getUserFromAccessToken(token)
     user.status = stat
+    db.session.add(user)
     db.session.commit()
     return jsonify(status='OK')
 
