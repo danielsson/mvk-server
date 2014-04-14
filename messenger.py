@@ -50,7 +50,12 @@ class GCMMessengerService(DummyMessengerService):
     def respondLocationFound(self, requestors, target, location):
         print "Responding to", requestors
 
-        reg_ids = [x.gcm_token for x in requestors if len(x.gcm_token) > 0]
+        reg_ids = []
+
+        for requester in requestors:
+            for device in requester.devices:
+                reg_ids.append(device.gcm_token)
+
         if len(reg_ids) == 0:
             print "No requestors for notify"
             return False
