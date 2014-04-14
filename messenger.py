@@ -48,7 +48,7 @@ class GCMMessengerService(DummyMessengerService):
         return True
 
     def respondLocationFound(self, requestors, target, location):
-        print "Responding"
+        print "Responding to", requestors
 
         reg_ids = [x.gcm_token for x in requestors if len(x.gcm_token) > 0]
         if len(reg_ids) == 0:
