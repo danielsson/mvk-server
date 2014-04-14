@@ -136,6 +136,7 @@ manager.create_api(
 @app.route('/api/status/set', methods=['POST'])
 def setStatus():
     data = request.get_json()
+    print data
     stat = data['status']
     if stat is None:
         abort(400) # Bad request
