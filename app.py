@@ -136,11 +136,14 @@ manager.create_api(
 @app.route('/api/status/set', methods=['POST'])
 def setStatus():
     data = request.get_json()
+    print data
     stat = data['status']
     if stat is None:
         abort(400) # Bad request
     token = request.headers.get('Authorization')
     user = authService.getUserFromAccessToken(token)
+    if user is None:
+        print "Wtf bbq"
     user.status = stat
     db.session.add(user)
     db.session.commit()
