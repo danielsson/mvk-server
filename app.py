@@ -11,7 +11,7 @@ import os
 #import config
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 from locator import locator_blueprint, LocatorService
-from messenger import GCMMessengerService, DummyMessengerService
+from messenger import GCMMessengerService
 from authentication import AuthenticationService, authcheck_blueprint
 
 #
@@ -42,9 +42,11 @@ authService = AuthenticationService(db)
 authcheckBlueprint = authcheck_blueprint(authService)
 app.register_blueprint(authcheckBlueprint)
 
+
 def current_user():
     token = request.headers.get('Authorization')
     return authService.getUserFromAccessToken(token)
+
 
 #
 # Preproccessor
@@ -56,6 +58,7 @@ def preproccessor(**kw):
     if authService.getUserFromAccessToken(token) is None:
         abort(403)
     return True
+
 
 #
 # Create the api
@@ -100,6 +103,7 @@ def setStatus():
     db.session.commit()
     return jsonify(status='OK')
 
+
 # Logout
 @app.route('/api/logout', methods=['POST'])
 def out():
@@ -107,13 +111,14 @@ def out():
     authService.logout(token)
     return jsonify(status='OK')
 
+
 # set Roles
 @app.route('/api/role/set', methods=['POST'])
 def setRole():
     token = request.headers.get('Authorization')
     user = authService.getUserFromAccessToken(token)
     data = request.get_json()
-    if data == None or 'role' not in data:
+    if data is None or 'role' not in data:
         abort(400) # Bad request
     roles = data['role']
     previousroles = user.roles.all()
@@ -125,7 +130,7 @@ def setRole():
     # Add all the new roles to the user
     for r in roles:
         datarole = Role.query.filter_by(title=r).first()
-        if datarole == None:
+        if datarole is None:
             newrole = Role(title=r, user=[user])
             db.session.add(newrole)
         else:
