@@ -12,7 +12,7 @@ import os
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 from locator import locator_blueprint, LocatorService
 from messenger import GCMMessengerService, DummyMessengerService
-from authentication import AuthenticationService
+from authentication import AuthenticationService, authcheck_blueprint
 
 #
 # Create the app
@@ -33,55 +33,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-
-
-
-# Blueprint for authchecking.
-#
-def authcheck_blueprint(authService):
-
-    ac = Blueprint("authcheck", __name__)
-
-    #
-    # A global check for all requests. Except for the root.
-    #
-    @ac.before_app_request
-    def authcheck():
-        if '/admin' in request.path:
-            return # Allow acess to admin interface.
-        if request.path != '/api/login' and request.path != '/':
-            # Get the auth token
-            token = request.headers.get('Authorization')
-            if token is None:
-                print "[AUTH] " + request.remote_addr + " missing token"
-                abort(401)  # Bad request
-            if authService.getUserFromAccessToken(token) is None:
-                print "[AUTH] " + request.remote_addr + " failed auth with token."
-                abort(401)  # Access denied
-
-    @ac.route("/api/login", methods=['POST'])
-    def login():
-        data = request.get_json()
-        if data is None or 'username' not in data or 'password' not in data:
-            print "[LOGIN] " + request.remote_addr + " tried login without password or username"
-            abort(400)  # Bad request
-        if 'gcm_token' not in data:
-            print "[LOGIN] " + request.remote_addr + " missing gcm_token"
-            abort(400)  # Bad request, missing gcm token.
-        user = authService.login(
-            data['username'],
-            data['password'])
-        if user is None:
-            print "[LOGIN] " + request.remote_addr + " tried login with not matching password/username"
-            abort(403)  # Access denied
-
-        device = authService.getDevice(user,data['gcm_token'])
-        accesstoken = authService.createAccessToken(device)
-
-        print "[LOGIN] " + request.remote_addr + " succesfully logged in"
-        return jsonify(token=accesstoken.token)
-
-    return ac
 
 #
 # Register the authentication blueprint
