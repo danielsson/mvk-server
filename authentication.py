@@ -1,5 +1,5 @@
 
-from flask import request
+from flask import request, abort
 from flask.blueprints import Blueprint
 from database import AccessToken, Device, User
 import hashlib
