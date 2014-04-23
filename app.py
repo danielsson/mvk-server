@@ -70,6 +70,7 @@ manager.create_api(
     Beacon,
     methods=['GET'],
     preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
+
 # User
 manager.create_api(
     User,

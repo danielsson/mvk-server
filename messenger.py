@@ -19,6 +19,10 @@ class DummyMessengerService(object):
         for req in requestors:
             print "requested by", req.fullname
 
+    def sendData(self, target, data):
+        print "Can somebody *please* give",  target.fullname, "this data"
+        return True
+
 
 class GCMMessengerService(DummyMessengerService):
     """GCMMessengerService sends important messages to recipients using GCM"""
@@ -71,9 +75,26 @@ class GCMMessengerService(DummyMessengerService):
 
         return True
 
+    def sendData(self, target, payload):
+        print "Sending data to", target.fullname
 
+        data = {
+            'action': 'DATA',
+            'data': payload
+        }
 
+        devices = target.devices.all()
+        registration_ids = [x.gcm_token for x in devices if len(x.gcm_token) > 0]
 
+        if len(registration_ids) == 0:
+            print "The user", target.username, "does not have any devices!"
+            return False
+
+        print registration_ids, data
+        response = self.gcm.json_request(registration_ids=registration_ids, data=data)
+        self.handleGCMErrors(response)
+
+        return True
 
     def handleGCMErrors(self, response):
         if 'errors' in response:
