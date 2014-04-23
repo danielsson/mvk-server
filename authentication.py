@@ -1,5 +1,5 @@
 
-from flask import request, abort
+from flask import request, abort, jsonify
 from flask.blueprints import Blueprint
 from database import AccessToken, Device, User
 import hashlib
