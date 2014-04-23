@@ -78,6 +78,18 @@ manager.create_api(
     exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
     preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
+@app.route('/api/user/me', methods=['GET'])
+def getMe():
+    user = current_user()
+    data = {
+        "fullname": user.fullname,
+        "id": user.id,
+        "phone_number":user.phone_number,
+        "status": user.status,
+        "username": user.username
+    }
+    return jsonify(data)
+
 #Get status
 manager.create_api(
     User,
