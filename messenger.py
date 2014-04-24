@@ -97,7 +97,7 @@ class GCMMessengerService(DummyMessengerService):
         return True
 
     def sendBroadcast(self, targets, message):
-        print "Sending " + message + " to everyone"
+        print u"Sending " + message + u" to everyone"
 
         # loop through all the targets and get the gcm tokens for them.
         devices = [] 
