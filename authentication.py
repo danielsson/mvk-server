@@ -1,5 +1,5 @@
 
-from flask import request, abort, jsonify
+from flask import request, abort, jsonify, Response
 from flask.blueprints import Blueprint
 from database import AccessToken, Device, User
 import hashlib
@@ -97,9 +97,16 @@ def authcheck_blueprint(authService):
     @ac.before_app_request
     def authcheck():
         if '/admin' in request.path:
-            return # Allow acess to admin interface.
-        if '/broadcast' in request.path:
-            return
+            auth = request.authorization
+            if not auth:
+                return authenticate_basic()
+            
+            user = authService.login(auth.username, auth.password)
+            if user is None or not user.is_admin:
+                return authenticate_basic()
+            
+            return 
+
         if request.path != '/api/login' and request.path != '/':
             # Get the auth token
             token = request.headers.get('Authorization')
@@ -139,4 +146,13 @@ def authcheck_blueprint(authService):
         print "[LOGIN] " + request.remote_addr + " succesfully logged in"
         return jsonify(token=accesstoken.token)
 
+    def authenticate_basic():
+        """Sends a 401 response that enables basic auth"""
+        return Response(
+        'Could not verify your access level for that URL.\n'
+        'You have to login with proper credentials', 401,
+        {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
     return ac
+
+

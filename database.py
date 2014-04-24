@@ -30,6 +30,8 @@ class User(db.Model):
     status = db.Column(db.String(32)) 
     phone_number = db.Column(db.String(32))
 
+    is_admin = db.Column(db.Boolean)
+
     def __str__(self):
         return self.fullname
 

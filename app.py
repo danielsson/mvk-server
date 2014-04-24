@@ -196,7 +196,20 @@ class BroadcastView(BaseView):
         flash("Successfully sent message")
         return redirect(url_for('.index'))
 
-admin = Admin()
+
+class LocateView(BaseView):
+    @expose('/')
+    def index(self):
+        users = User.query.all()
+
+        return self.render('locate.jade', users=users)
+
+    @expose('/send')
+    def send(self):
+        return abort(400)
+
+
+admin = Admin(name='LoKI')
 admin.register(Role, session=db.session)
 admin.register(User, session=db.session)
 admin.register(Device, session=db.session)
@@ -204,7 +217,8 @@ admin.register(AccessToken, session=db.session)
 admin.register(LocatingRequest, session=db.session)
 admin.register(Beacon, session=db.session)
 
-admin.add_view(BroadcastView(name='Broadcast'))
+admin.add_view(BroadcastView(name='Broadcast', category='Tools'))
+admin.add_view(LocateView(name='Locate', category='Tools'))
 
 admin.init_app(app)
 
