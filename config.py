@@ -8,7 +8,7 @@ class ProductionConfig(rootconfig.ProductionConfig):
     pass
 
 class DevelopmentConfig(rootconfig.DevelopmentConfig):
-	pass
+	GCM_TOKEN = 'AIzaSyAtwU_pr-oaoI0bVBrQbUEWWDTI0wyN9Jg'
 
 class TestingConfig(rootconfig.TestingConfig):
     pass
