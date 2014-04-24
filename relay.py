@@ -36,7 +36,7 @@ def relay_blueprint(db, relService, current_user):
 		
 		payload = data['data']
 
-		locService.sendData(target, payload)
+		relService.sendData(target, payload)
 
 		return jsonify(status="OK")
 
