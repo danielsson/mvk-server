@@ -60,6 +60,9 @@ class LocatorService(object):
 		
 		self.stopLocating(target)
 
+	def sendData(self, target, payload):
+		self.messager.sendData(target, payload)
+
 		
 
 
@@ -100,23 +103,25 @@ def locator_blueprint(db, locService, current_user):
 
 	@ls.route('/api/locate/data', methods=['POST'])
 	def sendData():
-	    data = request.get_json()
+		print "data sending method"
+		data = request.get_json()
 
-	    if data == None or 'target' not in data:
-	    	abort(400) # Bad request
+		if data == None or 'target' not in data:
+			abort(400) # Bad request
 
-	    target = User.query.get_or_404(data['target'])
+		target = User.query.get_or_404(data['target'])
 
-	    requester = current_user()
+		requester = current_user()
 
-	    if 'data' not in data:
-	    	abort(400) # Bad request, missing the data to send.
+		if 'data' not in data:
+			abort(400) # Bad request, missing the data to send.
 		
 		payload = data['data']
 
+		print "sending data: " + payload
 		locService.sendData(target, payload)
 
-	    return jsonify(status="OK")
+		return jsonify(status="OK")
 
 	return ls
 
