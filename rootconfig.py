@@ -18,7 +18,6 @@ class ProductionConfig(Config):
     PORT = 80
     DEBUG = False
     SECRET_KEY = "oajdspgjsejg63fgywtue7ri7wy"
-    HOST = 'loki.thrace.me'
 
 class DevelopmentConfig(Config):
     DEBUG = True
