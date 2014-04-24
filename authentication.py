@@ -120,9 +120,14 @@ def authcheck_blueprint(authService):
             print "[LOGIN] " + request.remote_addr + " tried login with not matching password/username"
             abort(403)  # Access denied
 
-        User.query.filter_by(gcm_token)
+        gcm_token = data['gcm_token']
 
-        device = authService.getDevice(user,data['gcm_token'])
+        # Remove previous accesstokens that are related to this device/gcm_token.
+        device = Device.query.filter_by(gcm_token=gcm_token).first()
+        for t in device.tokens:
+            logout(t) # remove the token from the database.
+
+        device = authService.getDevice(user, gcm_token)
         accesstoken = authService.createAccessToken(device)
 
         print "[LOGIN] " + request.remote_addr + " succesfully logged in"
