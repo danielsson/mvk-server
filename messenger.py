@@ -19,7 +19,7 @@ class DummyMessengerService(object):
         for req in requestors:
             print "requested by", req.fullname
 
-    def sendData(self, target, data):
+    def sendData(self, target, data, action):
         print "Can somebody *please* give",  target.fullname, "this data"
         return True
 
@@ -75,7 +75,7 @@ class GCMMessengerService(DummyMessengerService):
 
         return True
 
-    def sendData(self, target, payload):
+    def sendData(self, target, payload, action):
         print "Sending data to", target.fullname
 
         devices = target.devices.all()
@@ -86,7 +86,7 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
-            'action': 'DATA',
+            'action': action,
             'data': payload
         }
 

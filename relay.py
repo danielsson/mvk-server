@@ -12,7 +12,7 @@ class RelayService(object):
 		self.db = db
 		self.messager = messager
 
-	def sendData(self, target, payload):
+	def sendData(self, target, payload, action):
 		self.messager.sendData(target, payload)
 
 	def broadCast(self, targets, message):
@@ -32,14 +32,21 @@ def relay_blueprint(db, relService, current_user):
 
 		target = User.query.get_or_404(data['target'])
 
+
+
 		requester = current_user()
 
-		if 'data' not in data:
-			abort(400) # Bad request, missing the data to send.
+		if 'data' not in data or 'action' not in data:
+			abort(400) # Bad request, missing the data or action
 		
 		payload = data['data']
+		action = data['action']
 
-		relService.sendData(target, payload)
+		if action in ['BROADCAST', 'FOUND', 'BROADCAST']:
+			print "action not allowed"
+			abort(403) # Request okay, but not allowed action sent.
+
+		relService.sendData(target, payload, action)
 
 		return jsonify(status="OK")
 
@@ -57,6 +64,7 @@ def relay_blueprint(db, relService, current_user):
 		users = User.query.all()
 		relService.broadCast(users, message)
 
+		return jsonify(status="OK")
 
 	return rs
 
