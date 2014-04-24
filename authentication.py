@@ -45,9 +45,16 @@ class AuthenticationService(object):
 
         return None
 
+    # delete accesstoken.
     def logout(self, token):
         t = AccessToken.query.filter_by(token=token).first()
         self.db.session.delete(t)
+        self.db.session.commit()
+
+    def clearDevice(self, device):
+        self.db.session.delete(device)
+        for t in device.tokens:
+            authService.logout(t.token) # remove the tokens.
         self.db.session.commit()
 
     def getUserFromAccessToken(self, token):
@@ -77,9 +84,6 @@ class AuthenticationService(object):
         self.db.session.commit()
 
         return at
-
-
-
 
 # Blueprint for authchecking.
 #
@@ -124,8 +128,7 @@ def authcheck_blueprint(authService):
 
         # Remove previous accesstokens that are related to this device/gcm_token.
         device = Device.query.filter_by(gcm_token=gcm_token).first()
-        for t in device.tokens:
-            authService.logout(t.token) # remove the token from the database.
+        authService.deleteUserFromDevice()
 
         device = authService.getDevice(user, gcm_token)
         accesstoken = authService.createAccessToken(device)
