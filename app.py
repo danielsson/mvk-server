@@ -19,12 +19,13 @@ from authentication import AuthenticationService, authcheck_blueprint
 #
 app = Flask(__name__)
 
-def load_env(env_name, conf_name):
+def load_env(env_name, conf_name = None):
     """Load the specified key to config from env if exists"""
+    if conf_name is None:
+        conf_name = env_name
+        
     app.config[conf_name] = os.environ.get(env_name, app.config[conf_name])
 
-def load_env(name):
-    load_env(name, name)
 
 app.config.from_object(os.environ.get('APP_CONFIG', 'config.DevelopmentConfig'))
 
