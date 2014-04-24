@@ -1,6 +1,6 @@
 
 # coding=UTF8
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, redirect
 from flask.ext.restless import APIManager
 from flask.blueprints import Blueprint
 from flask.ext.superadmin import Admin
@@ -87,15 +87,8 @@ manager.create_api(
 @app.route('/api/user/me', methods=['GET'])
 def getMe():
     user = current_user()
-    data = {
-        "fullname": user.fullname,
-        "id": user.id,
-        "phone_number":user.phone_number,
-        "roles": user.roles,
-        "status": user.status,
-        "username": user.username
-    }
-    return data
+    adress = "/api/user/" + str(user.id)
+    return redirect(adress)
 
 #Get status
 manager.create_api(
