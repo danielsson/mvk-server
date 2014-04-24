@@ -48,6 +48,7 @@ class AuthenticationService(object):
     def logout(self, token):
         t = AccessToken.query.filter_by(token=token).first()
         self.db.session.delete(t)
+        self.db.session.commit()
 
     def getUserFromAccessToken(self, token):
         at = AccessToken.query.filter_by(token=token).first()
@@ -118,6 +119,8 @@ def authcheck_blueprint(authService):
         if user is None:
             print "[LOGIN] " + request.remote_addr + " tried login with not matching password/username"
             abort(403)  # Access denied
+
+        User.query.filter_by(gcm_token)
 
         device = authService.getDevice(user,data['gcm_token'])
         accesstoken = authService.createAccessToken(device)
