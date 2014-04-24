@@ -118,7 +118,6 @@ def locator_blueprint(db, locService, current_user):
 		
 		payload = data['data']
 
-		print "sending data: " + payload
 		locService.sendData(target, payload)
 
 		return jsonify(status="OK")

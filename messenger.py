@@ -87,7 +87,7 @@ class GCMMessengerService(DummyMessengerService):
 
         data = {
             'action': 'DATA',
-            'data': "test"
+            'data': payload
         }
 
         print registration_ids, data
