@@ -49,22 +49,6 @@ def relay_blueprint(db, relService, current_user):
 		relService.sendData(target, payload, action)
 
 		return jsonify(status="OK")
-
-	# XXX: THIS IS A TEMPORARY TEST METHOD. WILL BE REMOVED LATER!
-	@rs.route('/api/relay/broadcast', methods=['POST'])
-	def broadcast():
-		print "broadcast method"
-		data = request.get_json()
-
-		if data == None or 'message' not in data:
-			abort(400) # Bad request
-
-		message = data['message']
-
-		users = User.query.all()
-		relService.broadCast(users, message)
-
-		return jsonify(status="OK")
-
+		
 	return rs
 
