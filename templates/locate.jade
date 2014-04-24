@@ -1,0 +1,28 @@
+extends admin/layout.html
+
+block body
+
+	h1.main-title Manually start locating something
+
+	hr
+
+	form(method='POST', action=url_for('.send'))
+		label Sender
+		select.chosen(name='sender')
+			for user in users
+				option(value=user.id)= user.fullname
+
+		br
+
+		label Target
+		select(name='target')
+			for user in users
+				option(value=user.id)= user.fullname
+
+		br
+
+		input(type='submit')
+
+
+	a(href=url_for('.cheeseit')) Cheese: Activate
+

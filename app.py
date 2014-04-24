@@ -204,9 +204,28 @@ class LocateView(BaseView):
 
         return self.render('locate.jade', users=users)
 
-    @expose('/send')
+    @expose('/send', methods=['POST'])
     def send(self):
-        return abort(400)
+        
+        sender = User.query.get(request.form.get('sender', 1))
+        target = User.query.get(request.form.get('target', 1))
+
+        locatorService.startLocating(target, sender)
+
+        flash('Started locating')
+        return redirect(url_for('.index'))
+    
+    @expose('/cheeseit')
+    def cheeseit(self):
+
+        messageService.sendCheesit(User.query.all())
+        flash('Delicious topping activated')
+        return redirect(url_for('.index'))
+
+
+
+
+
 
 
 admin = Admin(name='LoKI')
