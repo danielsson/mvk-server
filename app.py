@@ -1,9 +1,9 @@
 
 # coding=UTF8
-from flask import Flask, jsonify, request, abort, redirect
+from flask import Flask, jsonify, request, abort, redirect, render_template, flash, url_for
 from flask.ext.restless import APIManager
 from flask.blueprints import Blueprint
-from flask.ext.superadmin import Admin
+from flask.ext.superadmin import Admin, BaseView, expose
 
 from gcm import GCM
 import os
@@ -24,14 +24,16 @@ def load_env(env_name, conf_name = None):
     """Load the specified key to config from env if exists"""
     if conf_name is None:
         conf_name = env_name
-        
-    app.config[conf_name] = os.environ.get(env_name, app.config[conf_name])
+    
+    app.config[conf_name] = os.environ.get(env_name, app.config.get(conf_name))
 
 
 app.config.from_object(os.environ.get('APP_CONFIG', 'config.DevelopmentConfig'))
 
 load_env('DATABASE_URL', 'SQLALCHEMY_DATABASE_URI')
 load_env('GCM_TOKEN')
+
+app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 
 #
 # Initialize database
@@ -177,6 +179,23 @@ app.register_blueprint(relayBlueprint)
 #
 # Create admin interface
 #
+class BroadcastView(BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('broadcast.jade')
+
+    @expose('/send', methods=['POST'])
+    def send(self):
+        message = request.form.get('message')
+        if message is None or len(message) == 0:
+            flash("You need to supply a message!")
+            return redirect(url_for('.index'))
+
+        messageService.sendBroadcast(User.query.all(), message)
+
+        flash("Successfully sent message")
+        return redirect(url_for('.index'))
+
 admin = Admin()
 admin.register(Role, session=db.session)
 admin.register(User, session=db.session)
@@ -184,6 +203,9 @@ admin.register(Device, session=db.session)
 admin.register(AccessToken, session=db.session)
 admin.register(LocatingRequest, session=db.session)
 admin.register(Beacon, session=db.session)
+
+admin.add_view(BroadcastView(name='Broadcast'))
+
 admin.init_app(app)
 
 #
@@ -192,6 +214,7 @@ admin.init_app(app)
 @app.route("/")
 def index():
     abort(418)
+
 
 if __name__ == '__main__':
 

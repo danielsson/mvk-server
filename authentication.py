@@ -94,6 +94,8 @@ def authcheck_blueprint(authService):
     def authcheck():
         if '/admin' in request.path:
             return # Allow acess to admin interface.
+        if '/broadcast' in request.path:
+            return
         if request.path != '/api/login' and request.path != '/':
             # Get the auth token
             token = request.headers.get('Authorization')
