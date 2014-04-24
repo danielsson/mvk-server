@@ -81,8 +81,6 @@ manager.create_api(
 @app.route('/api/user/me', methods=['GET'])
 def getMe():
     user = current_user()
-    for r in user.roles:
-        print r
     data = {
         "fullname": user.fullname,
         "id": user.id,
