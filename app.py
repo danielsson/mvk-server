@@ -11,6 +11,7 @@ import os
 #import config
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 from locator import locator_blueprint, LocatorService
+from relay import relay_blueprint, RelayService
 from messenger import GCMMessengerService
 from authentication import AuthenticationService, authcheck_blueprint
 
@@ -166,9 +167,12 @@ manager.create_api(
 gcm = GCM(app.config['GCM_TOKEN'])
 messageService = GCMMessengerService(db, gcm)
 locatorService = LocatorService(db, messageService)
+relayService = RelayService(db, messageService)
 
 locatorBlueprint = locator_blueprint(db, locatorService, current_user)
+relayBlueprint = relay_blueprint(db, relayService, current_user)
 app.register_blueprint(locatorBlueprint)
+app.register_blueprint(relayBlueprint)
 
 #
 # Create admin interface
