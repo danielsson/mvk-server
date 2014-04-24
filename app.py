@@ -164,7 +164,7 @@ manager.create_api(
 #
 # Create the localization queue
 #
-gcm = GCM(app.config('GCM_TOKEN'))
+gcm = GCM(app.config['GCM_TOKEN'])
 messageService = GCMMessengerService(db, gcm)
 locatorService = LocatorService(db, messageService)
 
