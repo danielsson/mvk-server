@@ -15,6 +15,10 @@ class RelayService(object):
 	def sendData(self, target, payload):
 		self.messager.sendData(target, payload)
 
+	def broadCast(self, targets, message):
+		self.messager.sendBroadcast(targets, message)
+
+
 def relay_blueprint(db, relService, current_user):
 
 	rs = Blueprint("Relay", __name__)

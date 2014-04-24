@@ -96,6 +96,31 @@ class GCMMessengerService(DummyMessengerService):
 
         return True
 
+    def sendBroadcast(self, targets, message):
+        print "Sending " + message + " to everyone"
+
+        # loop through all the targets and get the gcm tokens for them.
+        devices = [] 
+        for t in targets:
+            devices.extend(t.devices.all())
+        registration_ids = [x.gcm_token for x in devices if len(x.gcm_token) > 0]
+
+        if len(registration_ids) == 0:
+            print "The requested targets have no devices!"
+            return False
+
+        data = {
+            'action': 'BROADCAST',
+            'message': message
+        }
+
+        print registration_ids, data
+        response = self.gcm.json_request(registration_ids=registration_ids, data=data)
+        self.handleGCMErrors(response)
+
+        return True
+
+
     def handleGCMErrors(self, response):
         if 'errors' in response:
             print "GCM errored"
