@@ -19,12 +19,17 @@ from authentication import AuthenticationService, authcheck_blueprint
 #
 app = Flask(__name__)
 
-cvar = os.environ.get('APP_CONFIG', 'config.DevelopmentConfig')
-app.config.from_object(cvar)
+def load_env(env_name, conf_name):
+    """Load the specified key to config from env if exists"""
+    app.config[conf_name] = os.environ.get(env_name, app.config[conf_name])
 
-cvar = os.environ.get('DATABASE_URL')
-if cvar is not None:
-    app.config['SQLALCHEMY_DATABASE_URI'] = cvar
+def load_env(name):
+    load_env(name, name)
+
+app.config.from_object(os.environ.get('APP_CONFIG', 'config.DevelopmentConfig'))
+
+load_env('DATABASE_URL', 'SQLALCHEMY_DATABASE_URI')
+load_env('GCM_TOKEN')
 
 #
 # Initialize database
