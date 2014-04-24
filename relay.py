@@ -57,6 +57,7 @@ def relay_blueprint(db, relService, current_user):
 		users = User.query.all()
 		relService.broadCast(users, message)
 
+		return jsonify(status="OK")
 
 	return rs
 
