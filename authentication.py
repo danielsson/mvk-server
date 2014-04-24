@@ -54,7 +54,7 @@ class AuthenticationService(object):
     def clearDevice(self, device):
         self.db.session.delete(device)
         for t in device.tokens:
-            authService.logout(t.token) # remove the tokens.
+            self.logout(t.token) # remove the tokens.
         self.db.session.commit()
 
     def getUserFromAccessToken(self, token):
