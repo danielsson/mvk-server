@@ -1,0 +1,8 @@
+echo '[SCRIPT] Removing any previous screen with same name'
+screen -S mvk -X quit
+echo '[SCRIPT] Starting app in a another screen'
+screen -A -m -d -S mvk
+screen -S mvk -X stuff 'source venv/bin/activate'`echo -ne '\015'`
+screen -S mvk -X stuff 'sudo pip install -r requirements_no_postgresql.txt'`echo -ne '\015'`
+screen -S mvk -X stuff 'python app.py'`echo -ne '\015'`
+echo '[SCRIPT] done'
