@@ -19,7 +19,7 @@ def relay_blueprint(db, relService, current_user):
 
 	rs = Blueprint("Relay", __name__)
 
-	@rs.route('/api/locate/data', methods=['POST'])
+	@rs.route('/api/relay/data', methods=['POST'])
 	def sendData():
 		print "data sending method"
 		data = request.get_json()
