@@ -78,6 +78,21 @@ manager.create_api(
     exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
     preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
+@app.route('/api/user/me', methods=['GET'])
+def getMe():
+    user = current_user()
+    for r in user.roles:
+        print r
+    data = {
+        "fullname": user.fullname,
+        "id": user.id,
+        "phone_number":user.phone_number,
+        "roles": user.roles,
+        "status": user.status,
+        "username": user.username
+    }
+    return data
+
 #Get status
 manager.create_api(
     User,
@@ -151,7 +166,7 @@ manager.create_api(
 #
 # Create the localization queue
 #
-gcm = GCM('AIzaSyAtwU_pr-oaoI0bVBrQbUEWWDTI0wyN9Jg')
+gcm = GCM(app.config('GCM_TOKEN'))
 messageService = GCMMessengerService(db, gcm)
 locatorService = LocatorService(db, messageService)
 

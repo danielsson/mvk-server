@@ -9,6 +9,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
     PORT = 8080
     SECRET_KEY="kjbjbkkbj"
+    GCM_TOKEN="AIzaSyAtwU_pr-oaoI0bVBrQbUEWWDTI0wyN9Jg"
     HOST = '127.0.0.1'
 
 class ProductionConfig(Config):
