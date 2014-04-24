@@ -48,6 +48,7 @@ class AuthenticationService(object):
     def logout(self, token):
         t = AccessToken.query.filter_by(token=token).first()
         self.db.session.delete(t)
+        self.db.session.commit()
 
     def getUserFromAccessToken(self, token):
         at = AccessToken.query.filter_by(token=token).first()
@@ -119,7 +120,14 @@ def authcheck_blueprint(authService):
             print "[LOGIN] " + request.remote_addr + " tried login with not matching password/username"
             abort(403)  # Access denied
 
-        device = authService.getDevice(user,data['gcm_token'])
+        gcm_token = data['gcm_token']
+
+        # Remove previous accesstokens that are related to this device/gcm_token.
+        device = Device.query.filter_by(gcm_token=gcm_token).first()
+        for t in device.tokens:
+            authService.logout(t.token) # remove the token from the database.
+
+        device = authService.getDevice(user, gcm_token)
         accesstoken = authService.createAccessToken(device)
 
         print "[LOGIN] " + request.remote_addr + " succesfully logged in"
