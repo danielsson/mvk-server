@@ -1,0 +1,10 @@
+extends admin/layout.html
+block body
+
+	h1.main-title Send a message to all connected devices
+
+	hr
+
+	form(action=url_for('.send'), method="POST")
+		input(type="text", name="message")
+		input(type="submit")
