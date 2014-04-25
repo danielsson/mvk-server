@@ -10,17 +10,17 @@ class DummyMessengerService(object):
         super(DummyMessengerService, self).__init__()
     
     def requestTargetToIdentify(self, target):
-        print u'Can somebody *please* tell', target.fullname,  u'to stand up'
+        print 'Can somebody *please* tell', str(target.fullname), 'to stand up'
         return True
 
     def respondLocationFound(self, requestors, target, location):
-        print u"We've found it!", target.fullname, u'was hiding at', location
+        print "We've found it!", str(target.fullname), 'was hiding at', str(location)
 
         for req in requestors:
-            print u"requested by", req.fullname
+            print "requested by", str(req.fullname)
 
     def sendData(self, target, data, action):
-        print u"Can somebody *please* give",  target.fullname, u"this data"
+        print "Can somebody *please* give",  str(target.fullname), "this data"
         return True
 
 
@@ -32,7 +32,8 @@ class GCMMessengerService(DummyMessengerService):
         self.db = db
 
     def requestTargetToIdentify(self, target):
-        print u'Requesting to identify:', target.fullname
+        print 'Requesting to identify:'
+        print target.fullname
 
         data = {
             'action': 'LOCATE'
@@ -42,7 +43,7 @@ class GCMMessengerService(DummyMessengerService):
         registration_ids = [x.gcm_token for x in devices if len(x.gcm_token) > 0]
 
         if len(registration_ids) == 0:
-            print u'The user', target.username, u'does not have any devices!'
+            print 'The user does not have any devices!'
             return False
 
         print registration_ids, data
@@ -52,7 +53,7 @@ class GCMMessengerService(DummyMessengerService):
         return True
 
     def respondLocationFound(self, requestors, target, location):
-        print u'Responding to', requestors
+        print 'Responding to', str(requestors)
 
         reg_ids = []
 
@@ -76,13 +77,13 @@ class GCMMessengerService(DummyMessengerService):
         return True
 
     def sendData(self, target, payload, action):
-        print u'Sending data to', target.fullname
+        print 'Sending data to', str(target.fullname)
 
         devices = target.devices.all()
         registration_ids = [x.gcm_token for x in devices if len(x.gcm_token) > 0]
 
         if len(registration_ids) == 0:
-            print u'The user', target.username, u'does not have any devices!'
+            print 'The user', str(target.username), 'does not have any devices!'
             return False
 
         data = {
