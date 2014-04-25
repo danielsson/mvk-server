@@ -32,8 +32,7 @@ class GCMMessengerService(DummyMessengerService):
         self.db = db
 
     def requestTargetToIdentify(self, target):
-        print 'Requesting to identify:'
-        print target.fullname
+        print 'Requesting to identify:', str(target.fullname)
 
         data = {
             'action': 'LOCATE'
