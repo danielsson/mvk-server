@@ -195,7 +195,7 @@ class BroadcastView(BaseView):
             flash("You need to supply a message!")
             return redirect(url_for('.index'))
 
-        if role is None:
+        if role_id is None:
             flash("You need to select which group to target!")
             return redirect(url_for('.index'))
 
