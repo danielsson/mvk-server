@@ -202,7 +202,7 @@ class BroadcastView(BaseView):
         if role < 0:
             messageService.sendBroadcast(User.query.all(), message)
         else:
-            messageService.sendBroadcast(User.query.filter(User.roles.id==role).all(), message)
+            messageService.sendBroadcast(Role.query.get(role).users.all(), message)
 
         flash("Successfully sent message")
         return redirect(url_for('.index'))
