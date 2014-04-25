@@ -1,0 +1,21 @@
+extends admin/layout.html
+
+block body
+
+	h1.main-title Send data request
+
+	hr
+
+	form(method='POST', action=url_for('.send'))
+		label Target
+		select.chosen(name='Target')
+			for user in users
+				option(value=user.id)= user.fullname
+
+		br
+
+		input(type="text", name="action")
+		input(type="text", name="payload")
+
+
+		input(type='submit')
