@@ -182,16 +182,27 @@ app.register_blueprint(relayBlueprint)
 class BroadcastView(BaseView):
     @expose('/')
     def index(self):
+        roles = Role.query.all()
+
         return self.render('broadcast.jade')
 
     @expose('/send', methods=['POST'])
     def send(self):
+        role = request.form.get('role')
         message = request.form.get('message')
+
         if message is None or len(message) == 0:
             flash("You need to supply a message!")
             return redirect(url_for('.index'))
 
-        messageService.sendBroadcast(User.query.all(), message)
+        if role is None:
+            flash("You need to select which group to target!")
+            return redirect(url_for('.index'))
+
+        if role < 0:
+            messageService.sendBroadcast(User.query.all(), message)
+        else:
+            messageService.sendBroadcast(User.query.filter(User.roles.has(id=role)), message)
 
         flash("Successfully sent message")
         return redirect(url_for('.index'))
