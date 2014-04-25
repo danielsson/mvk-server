@@ -14,7 +14,7 @@ class RelayService(object):
 
 	def sendData(self, target, payload, action):
 		""" (Tries) sending the specifed data and action to the specifed client """
-		self.messager.sendData(target, payload)
+		self.messager.sendData(target, payload, action)
 
 	def broadCast(self, targets, message):
 		""" Send messages to the specifed targets """
