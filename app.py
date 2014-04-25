@@ -184,7 +184,7 @@ class BroadcastView(BaseView):
     def index(self):
         roles = Role.query.all()
 
-        return self.render('broadcast.jade')
+        return self.render('broadcast.jade', roles=roles)
 
     @expose('/send', methods=['POST'])
     def send(self):
