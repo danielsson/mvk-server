@@ -222,9 +222,28 @@ class LocateView(BaseView):
         flash('Delicious topping activated')
         return redirect(url_for('.index'))
 
+class DataView(BaseView):
+    @expose('/')
+    def index(self):
+        users = User.query.all()
 
+        return self.render('data.jade', users=users)
 
+    @expose('/send', methods=['POST']) 
+    def send(self):
+        target = User.query.get(request.form.get('sender', 1))
+        action = request.form.get('action')
+        payload = request.form.get('payload')
 
+        if action is None or len(action) == 0:
+            flash("You need to supply an action!")
+            return redirect(url_for('.index'))
+
+        if payload is None or len(payload) == 0:
+            flash("You need to supply a payload!")
+            return redirect(url_for('.index'))
+
+        messageService.sendData(target, payload, action)
 
 
 
@@ -238,6 +257,7 @@ admin.register(Beacon, session=db.session)
 
 admin.add_view(BroadcastView(name='Broadcast', category='Tools'))
 admin.add_view(LocateView(name='Locate', category='Tools'))
+admin.add_view(DataView(name='Data', category='Tools'))
 
 admin.init_app(app)
 
