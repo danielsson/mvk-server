@@ -202,7 +202,7 @@ class BroadcastView(BaseView):
         if role < 0:
             messageService.sendBroadcast(User.query.all(), message)
         else:
-            messageService.sendBroadcast(User.query.filter(User.roles.has(id=role)), message)
+            messageService.sendBroadcast(User.query.filter(User.roles.id==role).all(), message)
 
         flash("Successfully sent message")
         return redirect(url_for('.index'))
@@ -226,12 +226,12 @@ class LocateView(BaseView):
         flash('Started locating')
         return redirect(url_for('.index'))
     
-    @expose('/cheeseit')
-    def cheeseit(self):
+    #@expose('/cheeseit')
+    #def cheeseit(self):
 
-        messageService.sendCheesit(User.query.all())
-        flash('Delicious topping activated')
-        return redirect(url_for('.index'))
+        # messageService.sendCheesit(User.query.all())
+        # flash('Delicious topping activated')
+        # return redirect(url_for('.index'))
 
 class DataView(BaseView):
     @expose('/')
