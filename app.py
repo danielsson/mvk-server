@@ -188,7 +188,7 @@ class BroadcastView(BaseView):
 
     @expose('/send', methods=['POST'])
     def send(self):
-        role = request.form.get('role')
+        role_id = request.form.get('role')
         message = request.form.get('message')
 
         if message is None or len(message) == 0:
@@ -199,10 +199,11 @@ class BroadcastView(BaseView):
             flash("You need to select which group to target!")
             return redirect(url_for('.index'))
 
-        if role < 0:
+        if role_id < 0:
             messageService.sendBroadcast(User.query.all(), message)
         else:
-            messageService.sendBroadcast(Role.query.get(role).users.all(), message)
+            role = Role.query.get(role_id)
+            messageService.sendBroadcast(role.users, message)
 
         flash("Successfully sent message")
         return redirect(url_for('.index'))
