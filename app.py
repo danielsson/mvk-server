@@ -8,6 +8,8 @@ from flask.ext.superadmin import Admin, BaseView, expose
 from gcm import GCM
 import os
 
+from subprocess import check_output
+
 #import config
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 from locator import locator_blueprint, LocatorService
@@ -29,6 +31,11 @@ def load_env(env_name, conf_name = None):
 
 
 app.config.from_object(os.environ.get('APP_CONFIG', 'config.DevelopmentConfig'))
+
+revision = check_output(['git', 'rev-parse', 'HEAD'])
+revision_date = check_output(['git', 'show', '-s', '--format=\%ci', 'HEAD'])
+
+app.config['REVISION'] = revision
 
 load_env('DATABASE_URL', 'SQLALCHEMY_DATABASE_URI')
 load_env('GCM_TOKEN')
@@ -260,7 +267,7 @@ class DataView(BaseView):
 
 
 
-admin = Admin(name='LoKI')
+admin = Admin(name='LoKI Server revision' + app.config.get('REVISION', 'Unknown revision'))
 admin.register(Role, session=db.session)
 admin.register(User, session=db.session)
 admin.register(Device, session=db.session)
@@ -280,6 +287,10 @@ admin.init_app(app)
 @app.route("/")
 def index():
     abort(418)
+
+@app.route("/admin/version")
+def version():
+    return "Revision: %s <br> Committed: %s" % (revision[:8], revision_date)
 
 
 if __name__ == '__main__':
