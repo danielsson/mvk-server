@@ -243,6 +243,7 @@ class DataView(BaseView):
             flash("You need to supply a payload!")
             return redirect(url_for('.index'))
 
+        flash('Successfully sent data')
         messageService.sendData(target, payload, action)
 
 
