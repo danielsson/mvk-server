@@ -15,7 +15,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64))
 
-    user = db.relationship('User',secondary=roles, backref=db.backref('roles', lazy='dynamic'))
+    users = db.relationship('User',secondary=roles, backref=db.backref('roles', lazy='dynamic'))
 
     def __str__(self):
         return self.title
