@@ -42,7 +42,7 @@ def relay_blueprint(db, relService, current_user):
 		action = data['action']
 
 		# Check for actions that should be allowed to use, such that a location can't be faked.
-		if action in ['BROADCAST', 'FOUND', 'BROADCAST']:
+		if action in ('BROADCAST', 'FOUND', 'BROADCAST', 'CHEESEIT'):
 			print "action not allowed"
 			abort(403) # Request okay, but not allowed action sent.
 
