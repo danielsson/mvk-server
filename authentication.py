@@ -5,6 +5,11 @@ from database import AccessToken, Device, User
 import hashlib
 import os
 
+HASH_SALT = "MattiasRulez1337!!!saLt Bieber !?%#&^"
+
+def _hash(str):
+    return hashlib.sha256(str + HASH_SALT)
+
 
 # Authentication module for the app
 class DummyAuthenticationService:
@@ -22,7 +27,7 @@ class DummyAuthenticationService:
         return Device(user=user, gcm_token=gcm_token)
 
     def createAccessToken(self, device):
-        token = hashlib.sha256(os.urandom(16)).hexdigest()
+        token = _hash(os.urandom(16)).hexdigest()
         at = AccessToken(device=device, token=token)
 
         return at
@@ -39,8 +44,7 @@ class AuthenticationService(object):
         user = User.query.filter_by(username=username).first()
 
         if user is not None:
-            pass_hash = hashlib.sha256(password).hexdigest()
-            if user.password_hash == pass_hash:
+            if user.password_hash == _hash(password).hexdigest():
                 return user
 
         return None
@@ -76,7 +80,7 @@ class AuthenticationService(object):
 
     def createAccessToken(self, device):
 
-        token = hashlib.sha256(os.urandom(16) + "iluvthabiebz").hexdigest()
+        token = _hash(os.urandom(16)).hexdigest()
 
         at = AccessToken(device=device, token=token)
 
