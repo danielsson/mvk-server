@@ -227,12 +227,13 @@ class LocateView(BaseView):
         flash('Started locating')
         return redirect(url_for('.index'))
     
-    #@expose('/cheeseit')
-    #def cheeseit(self):
+    @expose('/cheeseit')
+    def cheeseit(self):
+        testuser = Role.query.get(7)
 
-        # messageService.sendCheesit(User.query.all())
-        # flash('Delicious topping activated')
-        # return redirect(url_for('.index'))
+        messageService.sendCheesit(testuser.users)
+        flash('Delicious topping activated')
+        return redirect(url_for('.index'))
 
 class DataView(BaseView):
     @expose('/')
