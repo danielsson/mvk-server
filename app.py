@@ -180,7 +180,7 @@ app.register_blueprint(relayBlueprint)
 # Create admin interface
 #
 
-admin.init_app(app)
+admin.init_app(app, messageService, locatorService)
 
 #
 # I'm a teapot.

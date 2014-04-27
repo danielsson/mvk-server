@@ -1,9 +1,10 @@
-
+from flask import request, flash, redirect, url_for
 from flask.ext.superadmin import Admin, BaseView, expose, model
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 
 
-def init_app(app):
+
+def init_app(app, messageService, locatorService):
 
     class BroadcastView(BaseView):
         @expose('/')
@@ -80,8 +81,11 @@ def init_app(app):
                 flash("You need to supply a payload!")
                 return redirect(url_for('.index'))
 
-            flash('Successfully sent data')
             messageService.sendData(target, payload, action)
+            flash('Successfully sent data')
+            return redirect(url_for('.index'))
+
+
 
     class UserView(model.ModelAdmin):
         session = db.session
