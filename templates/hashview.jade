@@ -1,0 +1,12 @@
+extends admin/layout.html
+block body
+
+	h1.main-title Password hash
+
+	hr
+
+	form(action=url_for('.send'), method="POST")
+		label Password
+		input(type="text", name="password")
+
+		input(type="submit")
