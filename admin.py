@@ -1,7 +1,7 @@
 from flask import request, flash, redirect, url_for
 from flask.ext.superadmin import Admin, BaseView, expose, model
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
-
+from authentication import _hash
 
 
 def init_app(app, messageService, locatorService):
@@ -91,6 +91,22 @@ def init_app(app, messageService, locatorService):
         session = db.session
         list_display = ('fullname', 'username', 'is_admin')
 
+
+    class HashView(BaseView):
+        @expose('/')
+        def index(self):
+            return self.render('hashview.jade')
+
+        @expose('/send', methods=['POST'])
+        def send(self):
+            pw = request.form.get('password')
+            hashpw = _hash(pw).hexdigest()
+            flash(hashpw)
+            return redirect(url_for('.index'))
+
+
+
+
     admin = Admin(name='LoKI')
     admin.register(Role, session=db.session)
     admin.register(User, UserView)
@@ -101,4 +117,5 @@ def init_app(app, messageService, locatorService):
     admin.add_view(BroadcastView(name='Broadcast', category='Tools'))
     admin.add_view(LocateView(name='Locate', category='Tools'))
     admin.add_view(DataView(name='Data', category='Tools'))
+    admin.add_view(HashView(name='Hash', category='Tools'))
     admin.init_app(app)
