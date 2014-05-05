@@ -38,7 +38,7 @@ class LocatorService(object):
         self.db.session.add(req)
         self.db.session.commit()
 
-        return True
+        return was_sent_successfully
 
 
     def stopLocating(self, target):
@@ -64,7 +64,7 @@ class LocatorService(object):
     def loggedInLetsAnswerEveryone(self, me):
         """ Called on login, checks for pending requests """
         # Check for requests that have yet to be sent.
-        requests = LocatingRequest.query.filter_by(target=user, sent_successfully=False).all()
+        requests = LocatingRequest.query.filter_by(target=me, sent_successfully=False).all()
         # If there is no pending requests, do nothing.
         if requests is None:
             return False
