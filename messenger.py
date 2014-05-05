@@ -37,7 +37,6 @@ class GCMMessengerService(DummyMessengerService):
         #print 'Requesting to identify:', target.fullname
 
         data = {
-            'time_to_live': gcm_time_to_live,
             'action': 'LOCATE',
             'requester': requester.fullname
         }
@@ -50,7 +49,7 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         #print registration_ids, data
-        response = self.gcm.json_request(registration_ids=registration_ids, data=data)
+        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
         self.handleGCMErrors(response)
 
         return True
@@ -69,35 +68,33 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
-            'time_to_live': gcm_time_to_live,
             'action':'FOUND',
             'location':location,
             'user':target.id
         }
 
-        response = self.gcm.json_request(registration_ids=reg_ids, data=data)
+        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=reg_ids, data=data)
         self.handleGCMErrors(response)
 
         return True
 
     def sendData(self, target, payload, action):
-        #print 'Sending data to', target.fullname
+        print "sending data"
 
         devices = target.devices.all()
         registration_ids = [x.gcm_token for x in devices if len(x.gcm_token) > 0]
 
         if len(registration_ids) == 0:
-            #print 'The user', target.username, 'does not have any devices!'
+            print "The requested targets have no devices!"
             return False
 
         data = {
-            'time_to_live': gcm_time_to_live,
             'action': action,
             'data': payload
         }
 
-        #print registration_ids, data
-        response = self.gcm.json_request(registration_ids=registration_ids, data=data)
+        print registration_ids
+        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
         self.handleGCMErrors(response)
 
         return True
@@ -115,13 +112,12 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
-            'time_to_live': gcm_time_to_live,
             'action': 'BROADCAST',
             'message': message
         }
 
         #print registration_ids, data
-        response = self.gcm.json_request(registration_ids=registration_ids, data=data)
+        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
         self.handleGCMErrors(response)
 
         return True
@@ -140,12 +136,11 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
-            'time_to_live': gcm_time_to_live,
             'action': 'CHEESEIT'
         }
 
         #print registration_ids, data
-        response = self.gcm.json_request(registration_ids=registration_ids, data=data)
+        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
         self.handleGCMErrors(response)
 
         return True
