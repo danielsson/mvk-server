@@ -91,7 +91,7 @@ class AuthenticationService(object):
 
 # Blueprint for authchecking.
 #
-def authcheck_blueprint(authService):
+def authcheck_blueprint(authService, locService):
 
     ac = Blueprint("authcheck", __name__)
 
@@ -146,6 +146,11 @@ def authcheck_blueprint(authService):
 
         device = authService.getDevice(user, gcm_token)
         accesstoken = authService.createAccessToken(device)
+
+        # Check for pending locating requests.
+        answered = locService.loggedInLetsAnswerEveryone(user)
+        if answered:
+            print "Answered some pending locating requests"
 
         print "[LOGIN] " + request.remote_addr + " succesfully logged in"
         return jsonify(token=accesstoken.token)

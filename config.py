@@ -5,10 +5,10 @@ import rootconfig
 
 
 class ProductionConfig(rootconfig.ProductionConfig):
-    pass
+   	SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 class DevelopmentConfig(rootconfig.DevelopmentConfig):
-	GCM_TOKEN = 'AIzaSyAtwU_pr-oaoI0bVBrQbUEWWDTI0wyN9Jg'
+	SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 class TestingConfig(rootconfig.TestingConfig):
     pass

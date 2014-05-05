@@ -43,19 +43,32 @@ with app.app_context():
     db.create_all()
 
 
-#
-# Register the authentication blueprint
-#
-authService = AuthenticationService(db)
 
-authcheckBlueprint = authcheck_blueprint(authService)
-app.register_blueprint(authcheckBlueprint)
 
 
 def current_user():
     token = request.headers.get('Authorization')
     return authService.getUserFromAccessToken(token)
 
+
+#
+# Create the services
+#
+gcm = GCM(app.config['GCM_TOKEN'])
+authService = AuthenticationService(db)
+messageService = GCMMessengerService(db, gcm)
+locatorService = LocatorService(db, messageService)
+relayService = RelayService(db, messageService)
+
+#
+# Blueprints
+# 
+authcheckBlueprint = authcheck_blueprint(authService, locatorService)
+locatorBlueprint = locator_blueprint(db, locatorService, current_user)
+relayBlueprint = relay_blueprint(db, relayService, current_user)
+app.register_blueprint(locatorBlueprint)
+app.register_blueprint(relayBlueprint)
+app.register_blueprint(authcheckBlueprint)
 
 #
 # Preproccessor
@@ -162,18 +175,6 @@ manager.create_api(
     include_columns=['id','title','user','user.id'],
     preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
-#
-# Create the localization queue
-#
-gcm = GCM(app.config['GCM_TOKEN'])
-messageService = GCMMessengerService(db, gcm)
-locatorService = LocatorService(db, messageService)
-relayService = RelayService(db, messageService)
-
-locatorBlueprint = locator_blueprint(db, locatorService, current_user)
-relayBlueprint = relay_blueprint(db, relayService, current_user)
-app.register_blueprint(locatorBlueprint)
-app.register_blueprint(relayBlueprint)
 
 #
 # Create admin interface

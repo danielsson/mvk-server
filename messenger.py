@@ -3,6 +3,7 @@ from gcm import GCM
 from database import Device
 
 # Class containing the GCM logic
+gcm_time_to_live = 3600
 
 class DummyMessengerService(object):
     """docstring for DummyMessenger"""
@@ -36,6 +37,7 @@ class GCMMessengerService(DummyMessengerService):
         #print 'Requesting to identify:', target.fullname
 
         data = {
+            'time_to_live': gcm_time_to_live,
             'action': 'LOCATE',
             'requester': requester.fullname
         }
@@ -67,6 +69,7 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
+            'time_to_live': gcm_time_to_live,
             'action':'FOUND',
             'location':location,
             'user':target.id
@@ -88,6 +91,7 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
+            'time_to_live': gcm_time_to_live,
             'action': action,
             'data': payload
         }
@@ -111,6 +115,7 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
+            'time_to_live': gcm_time_to_live,
             'action': 'BROADCAST',
             'message': message
         }
@@ -135,6 +140,7 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         data = {
+            'time_to_live': gcm_time_to_live,
             'action': 'CHEESEIT'
         }
 
