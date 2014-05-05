@@ -6,6 +6,7 @@ from flask.blueprints import Blueprint
 
 from database import User, Device, LocatingRequest
 
+import datetime
 
 class LocatorService(object):
     """LocatorService provides methods to interact with the localization process"""
@@ -59,6 +60,25 @@ class LocatorService(object):
         self.messager.respondLocationFound(requesters, target, location)
         
         self.stopLocating(target)       
+
+    def loggedInLetsAnswerEveryone(self, me):
+        """ Called on login, checks for pending requests """
+        # Check for requests that have yet to be sent.
+        requests = LocatingRequest.query.filter_by(target=user, sent_successfully=False).all()
+        # If there is no pending requests, do nothing.
+        if requests is None:
+            return False
+        # Now that we are logged in resend these requests.
+        for request in requests:
+            # Only answer requests newer than 10 minutes.
+            if request.created - datetime.utcnow() < timedelta(seconds=600):
+                self.startLocating(me, request.requester)
+            else:
+                # Delete requets older than 10 minutes.
+                # TODO: maybe send that you did this to the client...
+                self.db.session.delete(request)
+                self.db.session.commit()
+        return True
 
 
 def locator_blueprint(db, locService, current_user):
