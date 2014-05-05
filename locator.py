@@ -6,7 +6,7 @@ from flask.blueprints import Blueprint
 
 from database import User, Device, LocatingRequest
 
-import datetime
+from datetime import datetime, timedelta
 
 class LocatorService(object):
     """LocatorService provides methods to interact with the localization process"""
