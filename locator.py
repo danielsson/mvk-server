@@ -30,7 +30,7 @@ class LocatorService(object):
         # If this exists, a message has been sent, and were done.
         was_sent_successfully = False
         if not has_sent_locate_request:
-            was_sent_successfully = self.messager.requestTargetToIdentify(target)
+            was_sent_successfully = self.messager.requestTargetToIdentify(target, requester)
 
         # Put this request into the database
         req = LocatingRequest(requester=requester, target=target, sent_successfully=was_sent_successfully)

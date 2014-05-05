@@ -32,11 +32,12 @@ class GCMMessengerService(DummyMessengerService):
         self.gcm = gcm
         self.db = db
 
-    def requestTargetToIdentify(self, target):
+    def requestTargetToIdentify(self, target, requester):
         #print 'Requesting to identify:', target.fullname
 
         data = {
-            'action': 'LOCATE'
+            'action': 'LOCATE',
+            'requester': requester.fullname
         }
 
         devices = target.devices.all()
