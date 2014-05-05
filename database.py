@@ -42,7 +42,7 @@ class Device(db.Model):
     created = db.Column(db.DateTime)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', backref = db.backref('devices', lazy='dynamic'))
+    user = db.relationship('User', backref = db.backref('devices', lazy='dynamic'), cascade='delete')
 
     def __init__(self, *args, **kwargs):
         if not 'created' in kwargs:
@@ -65,7 +65,7 @@ class AccessToken(db.Model):
     created = db.Column(db.DateTime)
 
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
-    device = db.relationship('Device', backref = db.backref('tokens', lazy='dynamic'))
+    device = db.relationship('Device', backref = db.backref('tokens', lazy='dynamic'), cascade='delete')
 
 
 

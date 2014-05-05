@@ -37,7 +37,7 @@ class LocatorService(object):
         self.db.session.add(req)
         self.db.session.commit()
 
-        return True
+        return was_sent_successfully
 
 
     def stopLocating(self, target):
