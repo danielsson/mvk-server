@@ -81,13 +81,13 @@ class GCMMessengerService(DummyMessengerService):
         return True
 
     def sendData(self, target, payload, action):
-        #print 'Sending data to', target.fullname
+        print "sending data"
 
         devices = target.devices.all()
         registration_ids = [x.gcm_token for x in devices if len(x.gcm_token) > 0]
 
         if len(registration_ids) == 0:
-            #print 'The user', target.username, 'does not have any devices!'
+            print "The requested targets have no devices!"
             return False
 
         data = {
@@ -96,7 +96,7 @@ class GCMMessengerService(DummyMessengerService):
             'data': payload
         }
 
-        #print registration_ids, data
+        print registration_ids
         response = self.gcm.json_request(registration_ids=registration_ids, data=data)
         self.handleGCMErrors(response)
 
