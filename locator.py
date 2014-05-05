@@ -72,7 +72,7 @@ class LocatorService(object):
         for request in requests:
             # Only answer requests newer than 10 minutes.
             if request.created - datetime.utcnow() < timedelta(seconds=600):
-                self.startLocating(me, request.requester)
+                self.messager.requestTargetToIdentify(me, request.requester)
             else:
                 # Delete requets older than 10 minutes.
                 # TODO: maybe send that you did this to the client...
