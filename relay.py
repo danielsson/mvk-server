@@ -32,7 +32,7 @@ def relay_blueprint(db, relService, current_user):
 		if data == None or 'target' not in data:
 			abort(400) # Bad request
 
-		target = User.query.get_or_404(data['target'])
+		target = User.query.get_or_404(int(data['target']))
 		requester = current_user()
 
 		if 'data' not in data or 'action' not in data:
