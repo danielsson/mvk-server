@@ -5,10 +5,10 @@ import rootconfig
 
 
 class ProductionConfig(rootconfig.ProductionConfig):
-   	SQLALCHEMY_DATABASE_URI = 'sqlite://'
+   	pass
 
 class DevelopmentConfig(rootconfig.DevelopmentConfig):
-	SQLALCHEMY_DATABASE_URI = 'sqlite://'
+	pass
 
 class TestingConfig(rootconfig.TestingConfig):
     pass

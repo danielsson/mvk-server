@@ -2,4 +2,4 @@ venv/
 
 .DS_Store
 *.pyc
-#config.py
+config.py
