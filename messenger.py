@@ -49,7 +49,11 @@ class GCMMessengerService(DummyMessengerService):
             return False
 
         #print registration_ids, data
-        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
+        response = self.gcm.json_request(
+            collapse_key="LOCATE"+requester.fullname,
+            time_to_live=gcm_time_to_live,
+            registration_ids=registration_ids,
+            data=data)
         self.handleGCMErrors(response)
 
         return True
@@ -73,7 +77,11 @@ class GCMMessengerService(DummyMessengerService):
             'user':target.id
         }
 
-        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=reg_ids, data=data)
+        response = self.gcm.json_request(
+            collapse_key="FOUND"+location,
+            time_to_live=gcm_time_to_live,
+            registration_ids=reg_ids,
+            data=data)
         self.handleGCMErrors(response)
 
         return True
