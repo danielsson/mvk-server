@@ -1,5 +1,5 @@
 from flask import request, flash, redirect, url_for
-from flask.ext.superadmin import Admin, BaseView, expose, model
+from flask.ext.superadmin import Admin, BaseView, expose, model, AdminIndexView
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 from authentication import _hash
 
@@ -105,9 +105,13 @@ def init_app(app, messageService, locatorService):
             return redirect(url_for('.index'))
 
 
+    class AdminView(AdminIndexView):
+        @expose('/')
+        def index(self):
+            return self.render('admin_index.jade')
 
 
-    admin = Admin(name='LoKI')
+    admin = Admin(name='LoKI', index_view=AdminView())
     admin.register(Role, session=db.session)
     admin.register(User, UserView)
     admin.register(Device, session=db.session)
