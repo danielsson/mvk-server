@@ -102,7 +102,11 @@ class GCMMessengerService(DummyMessengerService):
         }
 
         print registration_ids
-        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
+        response = self.gcm.json_request(
+            collapse_key=action,
+            time_to_live=gcm_time_to_live,
+            registration_ids=registration_ids,
+            data=data)
         self.handleGCMErrors(response)
 
         return True
@@ -125,7 +129,11 @@ class GCMMessengerService(DummyMessengerService):
         }
 
         #print registration_ids, data
-        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
+        response = self.gcm.json_request(
+            collapse_key="BROADCAST"+message,
+            time_to_live=gcm_time_to_live,
+            registration_ids=registration_ids,
+            data=data)
         self.handleGCMErrors(response)
 
         return True
@@ -148,7 +156,11 @@ class GCMMessengerService(DummyMessengerService):
         }
 
         #print registration_ids, data
-        response = self.gcm.json_request(time_to_live=gcm_time_to_live, registration_ids=registration_ids, data=data)
+        response = self.gcm.json_request(
+            collapse_key="CHEESEIT",
+            time_to_live=gcm_time_to_live,
+            registration_ids=registration_ids,
+            data=data)
         self.handleGCMErrors(response)
 
         return True
