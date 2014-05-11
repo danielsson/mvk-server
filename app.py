@@ -159,7 +159,7 @@ def setRole():
     for r in roles:
         datarole = Role.query.filter_by(title=r).first()
         if datarole is None:
-            newrole = Role(title=r, user=[user])
+            newrole = Role(title=r, users=[user])
             db.session.add(newrole)
         else:
             datarole.user.append(user)
