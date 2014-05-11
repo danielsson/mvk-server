@@ -74,7 +74,8 @@ class GCMMessengerService(DummyMessengerService):
         data = {
             'action':'FOUND',
             'location':location,
-            'user':target.id
+            'user':target.id,
+            'target': target.fullname
         }
 
         response = self.gcm.json_request(
