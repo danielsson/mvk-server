@@ -162,7 +162,7 @@ def setRole():
             newrole = Role(title=r, users=[user])
             db.session.add(newrole)
         else:
-            datarole.user.append(user)
+            datarole.users.append(user)
 
     db.session.commit()
     return jsonify(status='OK')
