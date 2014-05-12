@@ -91,6 +91,10 @@ def init_app(app, messageService, locatorService):
         session = db.session
         list_display = ('fullname', 'username', 'is_admin')
 
+    class BeaconView(model.ModelAdmin):
+        session = db.session
+        list_display = ('location', 'uuid')
+
 
     class HashView(BaseView):
         @expose('/')
@@ -117,7 +121,7 @@ def init_app(app, messageService, locatorService):
     admin.register(Device, session=db.session)
     admin.register(AccessToken, session=db.session)
     admin.register(LocatingRequest, session=db.session)
-    admin.register(Beacon, session=db.session)
+    admin.register(Beacon, BeaconView)
     admin.add_view(BroadcastView(name='Broadcast', category='Tools'))
     admin.add_view(LocateView(name='Locate', category='Tools'))
     admin.add_view(DataView(name='Data', category='Tools'))
