@@ -54,7 +54,7 @@ def init_app(app, messageService, locatorService):
 
         @expose('/cheeseit')
         def cheeseit(self):
-            testuser = Role.query.get(7)
+            testuser = Role.query.get(9)
 
             messageService.sendCheesit(testuser.users)
             flash('Delicious topping activated')
