@@ -59,6 +59,7 @@ class DatabaseTests(unittest.TestCase):
     with app.app_context():
         db.create_all()
 
+
     def setUp(self):
         self.olof = User(username='olof', fullname='Olof Heden')
         self.ida = User(username='ida', fullname='Ida Azhimeme')
@@ -110,15 +111,26 @@ class HashTests(unittest.TestCase):
         authHash = _hash("Hello world")
         self.assertEquals(authHash.hexdigest(), correctHash.hexdigest())
 
+# OBS: dependant on hashest passing...
 class AuthenticationTests(unittest.TestCase):
+    #authService = AuthenticationService(db)
+
     def setUp(self):
-        db.init_app(app)
-        with app.app_context():
-            db.create_all()
-        authService = AuthenticationService(db)
+        pass
+        # THIS CODE DOES NOT WORK YET...
+        #password1 = _hash("abc").hexdigest()
+        #password2 = _hash("kittens").hexdigest()
+        #self.olof = User(username='olof2', fullname='Olof Heden', password_hash=password1)
+        #self.ida = User(username='ida', fullname='Ida Azhimeme', password_hash=password2)
+        #db.session.add(self.olof)
+        #db.session.add(self.ida)
+        #db.commit()
 
     def tearDown(self):
         pass
+        #db.delete(self.olof)
+        #db.delete(self.ida)
+        #db.commit()
 
     # The following tests needs to be written, usually needs more than one. For example one succesfull and one failing.
     # can be divided into class if deemed needed, for example if they would use the same setup & teardown methods.
