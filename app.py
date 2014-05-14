@@ -143,8 +143,7 @@ def out():
 # set Roles
 @app.route('/api/role/set', methods=['POST'])
 def setRole():
-    token = request.headers.get('Authorization')
-    user = authService.getUserFromAccessToken(token)
+    user = current_user()
     data = request.get_json()
     if data is None or 'role' not in data:
         abort(400) # Bad request
@@ -152,9 +151,10 @@ def setRole():
     previousroles = user.roles.all()
 
     # Remove all the roles that no longer exists
-    for prole in previousroles:
-        if prole.title not in roles:
-            db.session.delete(prole)
+    #for prole in previousroles:
+    #    if prole.title not in roles:
+    #        db.session.delete(prole)
+
     # Add all the new roles to the user
     for r in roles:
         datarole = Role.query.filter_by(title=r).first()
