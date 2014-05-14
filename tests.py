@@ -19,7 +19,6 @@ import unittest
 ###################################################################
 
 
-
 #
 # Here follows a few example tests.
 #
@@ -54,11 +53,13 @@ class TestInheritFromTest(TestTest):
 
 
 ################### DATABASE TESTS ########################
+
 class DatabaseTests(unittest.TestCase):
     db.init_app(app)
     with app.app_context():
         db.create_all()
 
+    #authService = AuthenticationService(db)
 
     def setUp(self):
         self.olof = User(username='olof', fullname='Olof Heden')
@@ -75,6 +76,8 @@ class DatabaseTests(unittest.TestCase):
 
         db.session.commit()
         self.phoneId = self.phone.id
+        self.db = db
+        #self.authService = authService
 
     def tearDown(self):
         db.session.delete(self.olof)
@@ -83,6 +86,9 @@ class DatabaseTests(unittest.TestCase):
         db.session.delete(self.lr)
 
         db.session.commit()
+
+class DatabaseTests(DatabaseTests):
+    
 
     def test_1(self):
         
@@ -112,25 +118,7 @@ class HashTests(unittest.TestCase):
         self.assertEquals(authHash.hexdigest(), correctHash.hexdigest())
 
 # OBS: dependant on hashest passing...
-class AuthenticationTests(unittest.TestCase):
-    #authService = AuthenticationService(db)
-
-    def setUp(self):
-        pass
-        # THIS CODE DOES NOT WORK YET...
-        #password1 = _hash("abc").hexdigest()
-        #password2 = _hash("kittens").hexdigest()
-        #self.olof = User(username='olof2', fullname='Olof Heden', password_hash=password1)
-        #self.ida = User(username='ida', fullname='Ida Azhimeme', password_hash=password2)
-        #db.session.add(self.olof)
-        #db.session.add(self.ida)
-        #db.commit()
-
-    def tearDown(self):
-        pass
-        #db.delete(self.olof)
-        #db.delete(self.ida)
-        #db.commit()
+class AuthenticationTests(DatabaseTests):
 
     # The following tests needs to be written, usually needs more than one. For example one succesfull and one failing.
     # can be divided into class if deemed needed, for example if they would use the same setup & teardown methods.
@@ -157,6 +145,20 @@ class AuthenticationTests(unittest.TestCase):
     def testCreateAccessToken(self):
         #TODO write createaccesstoken tests
         pass
+
+
+########################### APP TESTS ################################3
+# 
+class appTest(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):        
+        pass
+
+    def testCurrentUser(self):
+        pass
+
 
 if __name__ == '__main__':
     with app.app_context():
