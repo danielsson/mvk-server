@@ -1,7 +1,9 @@
 
 # coding=UTF8
 from database import Device, LocatingRequest, Role, User, db
+from authentication import _hash, HASH_SALT, AuthenticationService
 from app import app
+from hashlib import sha256
 import unittest
 
 #################### TESTING INSTRUCTIONS #########################
@@ -50,6 +52,8 @@ class TestInheritFromTest(TestTest):
 # Add more example tests below
 #
 
+
+################### DATABASE TESTS ########################
 class DatabaseTests(unittest.TestCase):
     db.init_app(app)
     with app.app_context():
@@ -91,8 +95,56 @@ class DatabaseTests(unittest.TestCase):
 
         self.assertEquals(self.phone.created, oldCreated)
 
+######################### AUTHENTICATION TESTS #################################
 
+class HashTests(unittest.TestCase):
+    # A very simple test
+    def testHash(self):
+        correctHash = sha256("Hello world" + HASH_SALT)
+        authHash = _hash("Hello world")
+        self.assertEquals(authHash.hexdigest(), correctHash.hexdigest())
 
+    @unittest.expectedFailure
+    def testFailHash(self):
+        notCorrectHash = sha256("kittens" + HASH_SALT)
+        authHash = _hash("Hello world")
+        self.assertEquals(authHash.hexdigest(), correctHash.hexdigest())
+
+class AuthenticationTests(unittest.TestCase):
+    def setUp(self):
+        db.init_app(app)
+        with app.app_context():
+            db.create_all()
+        authService = AuthenticationService(db)
+
+    def tearDown(self):
+        pass
+
+    # The following tests needs to be written, usually needs more than one. For example one succesfull and one failing.
+    # can be divided into class if deemed needed, for example if they would use the same setup & teardown methods.
+    def testLogin(self):
+        #TODO: write login tests
+        pass
+
+    def testLogout(self):
+        #TODO: write logout tests
+        pass
+
+    def testClearDevice(self):
+        #TODO: write cleardevice tests
+        pass
+
+    def testGetUserFromAccessToken(self):
+        #TODO: write getuser... tests
+        pass
+
+    def testGetDevice(self):
+        #TODO: write getdevice tests
+        pass
+
+    def testCreateAccessToken(self):
+        #TODO write createaccesstoken tests
+        pass
 
 if __name__ == '__main__':
     with app.app_context():
