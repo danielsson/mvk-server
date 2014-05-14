@@ -117,8 +117,16 @@ class HashTests(unittest.TestCase):
         authHash = _hash("Hello world")
         self.assertEquals(authHash.hexdigest(), correctHash.hexdigest())
 
-# OBS: dependant on hashest passing...
+# OBS: dependant on hashtest passing...
 class AuthenticationTests(DatabaseTests):
+
+    def setUp(self):
+        super(AuthenticationTests, self).setUp()
+        authService = AuthenticationService(db)
+
+    def tearDown(self):
+        super(AuthenticationTests, self).tearDown() 
+        authService = None
 
     # The following tests needs to be written, usually needs more than one. For example one succesfull and one failing.
     # can be divided into class if deemed needed, for example if they would use the same setup & teardown methods.
