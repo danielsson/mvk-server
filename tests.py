@@ -13,7 +13,7 @@ import unittest
 #   4. "virtualenv venv"
 #   5. "source venv/Scripts/activate" (for windows) "source venv/bin/activate" (for the rest)
 # 6. Install the needed plugins, "pip install -r requirements_no_postgresql.txt" (may need sudo)
-# 7. Now it is ready to run the tests. Run them with the command: "python tests.py"
+# 7. Now it is ready to run the tests. Run them with the command: "python tests.py -v" (The v is for running it in verbose mode)
 ###################################################################
 
 
@@ -34,9 +34,15 @@ class TestTest(unittest.TestCase):
         pass # As simple as possible test. 
         # If this not pass something is wrong with the testing. Should never happen.
 
+    # Will always fail.
+    @unittest.expectedFailure
+    def test_fail(self):
+        self.assertEquals(1, 2, "broken")
+
+
 class TestInheritFromTest(TestTest):
     def test_inherit(self): # Uses the 
-        print self.message
+        self.assertEquals(self.message, "Hello world")
 #
 # End of examples tests.
 #
