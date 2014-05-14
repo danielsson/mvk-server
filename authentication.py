@@ -140,9 +140,10 @@ def authcheck_blueprint(authService, locService):
         gcm_token = data['gcm_token']
 
         # Remove previous accesstokens that are related to this device/gcm_token.
-        device = Device.query.filter_by(gcm_token=gcm_token).first()
-        if device is not None:
-            authService.clearDevice(device)
+        devices = Device.query.filter_by(gcm_token=gcm_token).all()
+        if devices is not None:
+            for device in devices:
+                authService.clearDevice(device)
 
         device = authService.getDevice(user, gcm_token)
         accesstoken = authService.createAccessToken(device)
