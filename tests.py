@@ -59,8 +59,6 @@ class DatabaseTests(unittest.TestCase):
     with app.app_context():
         db.create_all()
 
-    #authService = AuthenticationService(db)
-
     def setUp(self):
         self.olof = User(username='olof', fullname='Olof Heden')
         self.ida = User(username='ida', fullname='Ida Azhimeme')
@@ -76,8 +74,6 @@ class DatabaseTests(unittest.TestCase):
 
         db.session.commit()
         self.phoneId = self.phone.id
-        self.db = db
-        #self.authService = authService
 
     def tearDown(self):
         db.session.delete(self.olof)
@@ -132,6 +128,7 @@ class AuthenticationTests(DatabaseTests):
     # can be divided into class if deemed needed, for example if they would use the same setup & teardown methods.
     def testLogin(self):
         #TODO: write login tests
+        #authService.login
         pass
 
     def testLogout(self):
