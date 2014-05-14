@@ -34,15 +34,14 @@ class TestTest(unittest.TestCase):
         pass # As simple as possible test. 
         # If this not pass something is wrong with the testing. Should never happen.
 
+class TestInheritFromTest(TestTest):
+    def test_inherit(self):
+        self.assertEquals(self.message, "Hello world")
+
     # Will always fail.
     @unittest.expectedFailure
     def test_fail(self):
         self.assertEquals(1, 2, "broken")
-
-
-class TestInheritFromTest(TestTest):
-    def test_inherit(self): # Uses the 
-        self.assertEquals(self.message, "Hello world")
 #
 # End of examples tests.
 #
