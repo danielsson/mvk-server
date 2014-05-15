@@ -1,13 +1,17 @@
 # coding=UTF8
 from flask.ext.testing import TestCase
 import unittest
+from gcm import GCM
 
+from messenger import GCMMessengerService
+from locator import LocatorService
 from app import create_app
 from database import db, User, Device, LocatingRequest
 
 class baseCase(TestCase):
     def create_app(self): # do not know why this is needed.
-        return create_app()
+        self.app = create_app()
+        return self.app
 
 class baseDataCase(baseCase):
     def setUp(self):
@@ -54,27 +58,28 @@ class databaseTests(baseDataCase):
 
         self.assertEquals(self.phone.created, oldCreated)
 
-class moreTests(baseDataCase):
+class locatorTests(baseDataCase):
 
     def setUp(self): 
-        super(moreTests, self).setUp()
+        super(locatorTests, self).setUp()
         self.olof = User(username='olof', fullname='Olof Heden')
-        self.phone = Device(gcm_token="123564", user=self.olof)
+        self.ida = User(username='ida', fullname='Ida Azhimeme')
+        self.phone = Device(gcm_token="123456", user=self.olof)
         db.session.add(self.phone)
         db.session.commit()
         self.phoneId = self.phone.id
 
+        # stuff
+        gcm = GCM(self.app.config['GCM_TOKEN'])
+        self.mesService = GCMMessengerService(db, gcm)
+        self.locService = LocatorService(db, self.mesService)
+
     def tearDown(self):
-        super(moreTests, self).tearDown()
+        super(locatorTests, self).tearDown()
 
-    @unittest.expectedFailure
-    def test1337(self):
-        self.phone = Device.query.get(self.phoneId)
-        self.assertEquals(self.phone.gcm_token, "1337")
+    def testStartLocating(self):
+        pass # Can't be written for now due to not always having valid gcm stuff.
 
-    def test1338(self):
-        self.phone = Device.query.get(self.phoneId)
-        self.assertEquals(self.phone.gcm_token, "123564")
 
 if __name__ == '__main__':
     unittest.main()
