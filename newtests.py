@@ -78,8 +78,11 @@ class locatorTests(baseDataCase):
         super(locatorTests, self).tearDown()
 
     def testStartLocating(self):
-        pass # Can't be written for now due to not always having valid gcm stuff.
-
+        self.lr = LocatingRequest(requester=self.ida, target=self.olof)
+        db.session.add(self.lr)
+        db.session.commit()
+        retValue = self.locService.startLocating(self.olof, self.ida)
+        self.assertEqual(retValue, True)
 
 if __name__ == '__main__':
     unittest.main()
