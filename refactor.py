@@ -90,7 +90,8 @@ def refactor_blueprint(db, authService, app, current_user):
         # Remove all the roles that no longer exists
         for prole in previousroles:
             if prole.title not in roles:
-                db.session.delete(prole)
+                # Remove the user from user list in the role.
+                prole.users.remove(user)
         # Add all the new roles to the user
         for r in roles:
             datarole = Role.query.filter_by(title=r).first()
