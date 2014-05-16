@@ -55,7 +55,6 @@ def refactor_blueprint(db, authService, app, current_user):
     @rf.route('/api/status/set', methods=['POST'])
     def setStatus():
         data = request.get_json()
-        print data
         stat = data['status']
         if stat is None:
             abort(400) # Bad request
