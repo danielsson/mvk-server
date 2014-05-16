@@ -1,3 +1,4 @@
+# OBS PLEASE DO NOT WRITE NEW TESTS HERE, PLEASE WRITE THEM IN NEWTESTS.PY. 
 
 # coding=UTF8
 from database import Device, LocatingRequest, Role, User, db
