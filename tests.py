@@ -1,7 +1,10 @@
+# OBS PLEASE DO NOT WRITE NEW TESTS HERE, PLEASE WRITE THEM IN NEWTESTS.PY. 
 
 # coding=UTF8
 from database import Device, LocatingRequest, Role, User, db
+from authentication import _hash, HASH_SALT, AuthenticationService
 from app import app
+from hashlib import sha256
 import unittest
 
 #################### TESTING INSTRUCTIONS #########################
@@ -13,9 +16,8 @@ import unittest
 #   4. "virtualenv venv"
 #   5. "source venv/Scripts/activate" (for windows) "source venv/bin/activate" (for the rest)
 # 6. Install the needed plugins, "pip install -r requirements_no_postgresql.txt" (may need sudo)
-# 7. Now it is ready to run the tests. Run them with the command: "python tests.py"
+# 7. Now it is ready to run the tests. Run them with the command: "python tests.py -v" (The v is for running it in verbose mode)
 ###################################################################
-
 
 
 #
@@ -35,8 +37,13 @@ class TestTest(unittest.TestCase):
         # If this not pass something is wrong with the testing. Should never happen.
 
 class TestInheritFromTest(TestTest):
-    def test_inherit(self): # Uses the 
-        print self.message
+    def test_inherit(self):
+        self.assertEquals(self.message, "Hello world")
+
+    # Will always fail.
+    @unittest.expectedFailure
+    def test_fail(self):
+        self.assertEquals(1, 2, "broken")
 #
 # End of examples tests.
 #
@@ -44,6 +51,9 @@ class TestInheritFromTest(TestTest):
 #
 # Add more example tests below
 #
+
+
+################### DATABASE TESTS ########################
 
 class DatabaseTests(unittest.TestCase):
     db.init_app(app)
@@ -74,6 +84,9 @@ class DatabaseTests(unittest.TestCase):
 
         db.session.commit()
 
+class DatabaseTests(DatabaseTests):
+    
+
     def test_1(self):
         
         self.phone = Device.query.get(self.phoneId)
@@ -86,7 +99,71 @@ class DatabaseTests(unittest.TestCase):
 
         self.assertEquals(self.phone.created, oldCreated)
 
+######################### AUTHENTICATION TESTS #################################
 
+class HashTests(unittest.TestCase):
+    # A very simple test
+    def testHash(self):
+        correctHash = sha256("Hello world" + HASH_SALT)
+        authHash = _hash("Hello world")
+        self.assertEquals(authHash.hexdigest(), correctHash.hexdigest())
+
+    @unittest.expectedFailure
+    def testFailHash(self):
+        notCorrectHash = sha256("kittens" + HASH_SALT)
+        authHash = _hash("Hello world")
+        self.assertEquals(authHash.hexdigest(), correctHash.hexdigest())
+
+# OBS: dependant on hashtest passing...
+class AuthenticationTests(DatabaseTests):
+
+    def setUp(self):
+        super(AuthenticationTests, self).setUp()
+        authService = AuthenticationService(db)
+
+    def tearDown(self):
+        super(AuthenticationTests, self).tearDown() 
+        authService = None
+
+    # The following tests needs to be written, usually needs more than one. For example one succesfull and one failing.
+    # can be divided into class if deemed needed, for example if they would use the same setup & teardown methods.
+    def testLogin(self):
+        #TODO: write login tests
+        #authService.login
+        pass
+
+    def testLogout(self):
+        #TODO: write logout tests
+        pass
+
+    def testClearDevice(self):
+        #TODO: write cleardevice tests
+        pass
+
+    def testGetUserFromAccessToken(self):
+        #TODO: write getuser... tests
+        pass
+
+    def testGetDevice(self):
+        #TODO: write getdevice tests
+        pass
+
+    def testCreateAccessToken(self):
+        #TODO write createaccesstoken tests
+        pass
+
+
+########################### APP TESTS ################################3
+# 
+class appTest(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):        
+        pass
+
+    def testCurrentUser(self):
+        pass
 
 
 if __name__ == '__main__':

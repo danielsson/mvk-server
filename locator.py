@@ -23,14 +23,24 @@ class LocatorService(object):
 
         ongoing = LocatingRequest.query.filter_by(requester=requester, target=target).first()
         if ongoing != None:
-            # We're already waiting
-            return True
+            # We're already waiting, as there is already a request between us and target that has been sent.
 
+            # If enough time has passed, allow us to send it again.
+            if (datetime.utcnow() - ongoing.created) > timedelta(minutes=1):
+                self.db.session.delete(ongoing) # Delete the already ongoing request.
+            else:
+                # Already a request sent in the last 1 minutes.
+                return True
+
+        # Has someone sent a succesful request to the person, but not received response?
         has_sent_locate_request = LocatingRequest.query.filter_by(target=target, sent_successfully=True).first()
 
         # If this exists, a message has been sent, and were done.
         was_sent_successfully = False
         if not has_sent_locate_request:
+            was_sent_successfully = self.messager.requestTargetToIdentify(target, requester)
+        else: 
+            # For now do it anyways, as we want to notify the user of each request.
             was_sent_successfully = self.messager.requestTargetToIdentify(target, requester)
 
         # Put this request into the database

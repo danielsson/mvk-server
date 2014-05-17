@@ -1,0 +1,2 @@
+set APP_CONFIG=TestingConfig
+python tests.py -v

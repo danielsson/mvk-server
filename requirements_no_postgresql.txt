@@ -2,6 +2,7 @@ Flask==0.10.1
 Flask-Restless==0.12.1
 Flask-SQLAlchemy==1.0
 Flask-SuperAdmin==1.7.1
+Flask-Testing
 Flask-WTF==0.9.5
 Jinja2==2.7.2
 MarkupSafe==0.19
