@@ -3,7 +3,7 @@
 # coding=UTF8
 from database import Device, LocatingRequest, Role, User, db
 from authentication import _hash, HASH_SALT, AuthenticationService
-from app import app
+from app import create_app
 from hashlib import sha256
 import unittest
 
@@ -56,6 +56,7 @@ class TestInheritFromTest(TestTest):
 ################### DATABASE TESTS ########################
 
 class DatabaseTests(unittest.TestCase):
+    app = create_app()
     db.init_app(app)
     with app.app_context():
         db.create_all()
@@ -92,7 +93,7 @@ class DatabaseTests(DatabaseTests):
         self.phone = Device.query.get(self.phoneId)
         oldCreated = self.phone.created 
 
-        self.phone.gcm_token = u"ouigöi"
+        self.phone.gcm_token = u"ouigpi"
 
         db.session.add(self.phone)
         db.session.commit();
@@ -167,5 +168,6 @@ class appTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    app = create_app()
     with app.app_context():
         unittest.main()
