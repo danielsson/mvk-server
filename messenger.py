@@ -99,7 +99,8 @@ class GCMMessengerService(DummyMessengerService):
 
         data = {
             'action': action,
-            'user': requester.id,
+            'requester': requester.id,
+            'requester_fullname': requester.fullname,
             'data': payload
         }
 
