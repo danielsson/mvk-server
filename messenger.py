@@ -87,7 +87,7 @@ class GCMMessengerService(DummyMessengerService):
 
         return True
 
-    def sendData(self, target, payload, action):
+    def sendData(self, requester, target, payload, action):
         print "sending data"
 
         devices = target.devices.all()
@@ -99,6 +99,7 @@ class GCMMessengerService(DummyMessengerService):
 
         data = {
             'action': action,
+            'user': requester.id,
             'data': payload
         }
 

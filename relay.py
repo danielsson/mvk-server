@@ -12,9 +12,9 @@ class RelayService(object):
 		self.db = db
 		self.messager = messager
 
-	def sendData(self, target, payload, action):
+	def sendData(self, requester, target, payload, action):
 		""" (Tries) sending the specifed data and action to the specifed client """
-		self.messager.sendData(target, payload, action)
+		self.messager.sendData(requester, target, payload, action)
 
 	def broadCast(self, targets, message):
 		""" Send messages to the specifed targets """
@@ -46,7 +46,7 @@ def relay_blueprint(db, relService, current_user):
 			print "action not allowed"
 			abort(403) # Request okay, but not allowed action sent.
 
-		relService.sendData(target, payload, action)
+		relService.sendData(requester, target, payload, action)
 
 		return jsonify(status="OK")
 		
