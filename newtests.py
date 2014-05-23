@@ -8,8 +8,12 @@ from locator import LocatorService
 from app import create_app
 from database import db, User, Device, LocatingRequest
 
+# This is the class to write more test and test the application in.
+# It is currently using a flask extension for testing. But it as of now not using
+# the flask specific tests that are available.
+
 class baseCase(TestCase):
-    def create_app(self): # do not know why this is needed.
+    def create_app(self):
         self.app = create_app()
         return self.app
 

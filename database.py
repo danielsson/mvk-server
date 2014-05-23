@@ -7,6 +7,7 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+# Creates a many to many relation between roles and users.
 roles = db.Table('roles', db.Model.metadata,
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')))

@@ -4,6 +4,10 @@ from flask.blueprints import Blueprint
 
 from database import User
 
+# This file contains the method for relaying data to the client.
+# the data in this case can be anything.
+# The methods in the client using this method for sending data should be
+# refactored to using a specific method of data transfer.
 
 class RelayService(object):
 	""" Provides methods that sends data to the client(s) """

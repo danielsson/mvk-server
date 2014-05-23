@@ -4,6 +4,10 @@ from flask.blueprints import Blueprint
 
 from database import User, Device, db, Beacon, Role, LocatingRequest, AccessToken
 
+#
+# This file contains the things that may need to be refactored or moved somewhere else. 
+#
+
 def refactor_blueprint(db, authService, app, current_user):
 
     rf = Blueprint("Refactor", __name__)
@@ -37,6 +41,7 @@ def refactor_blueprint(db, authService, app, current_user):
         exclude_columns=['password_hash', 'devices', 'requesting', 'targeted_by'],
         preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
+    # The me status works, by redirecting the request to the correct adress. 
     @rf.route('/api/user/me', methods=['GET'])
     def getMe():
         user = current_user()
@@ -111,6 +116,7 @@ def refactor_blueprint(db, authService, app, current_user):
         include_columns=['id','title','user','user.id'],
         preprocessors=dict(GET_SINGLE=[preproccessor], GET_MANY=[preproccessor]))
 
+    # Return the blueprint.
     return rf
     
 
