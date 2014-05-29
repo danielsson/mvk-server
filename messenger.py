@@ -38,7 +38,8 @@ class GCMMessengerService(DummyMessengerService):
 
         data = {
             'action': 'LOCATE',
-            'requester': requester.fullname
+            'requester_fullname': requester.fullname,
+            'requester': requester.id
         }
 
         devices = target.devices.all()
